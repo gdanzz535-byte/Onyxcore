@@ -1,0 +1,145 @@
+{
+  "jetz": {
+    "sessionId": "15efc6b3eaec91ad73893da719df84b8",
+    "loginTime": 1767414086329,
+    "userAgent": "Mozilla/5.0 (Linux; Android 15; Infinix X6855 Build/AP3A.240905.015.A2; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/143.0.7499.34 Mobile Safari/537.36",
+    "expiresAt": 1768216606221,
+    "remember": true,
+    "userData": {
+      "username": "jetz",
+      "role": "user",
+      "expired": 1775967621565
+    },
+    "lastActive": 1767611802544
+  },
+  "(rangga)": {
+    "sessionId": "b97b93c3bb42477aa7ea4720a804c9da",
+    "loginTime": 1767444088280,
+    "userAgent": "Mozilla/5.0 (Linux; Android 15; V2332 Build/AP3A.240905.015.A2; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/143.0.7499.34 Safari/537.36",
+    "expiresAt": 1768228373728,
+    "remember": true,
+    "userData": {
+      "username": "(rangga)",
+      "role": "user",
+      "expired": 1770036018917
+    },
+    "lastActive": 1767623560152
+  },
+  "GAGATAMPAN": {
+    "sessionId": "0062418dc679e18b5dd31eb990897851",
+    "loginTime": 1767447295137,
+    "userAgent": "Mozilla/5.0 (Linux; Android 15; SM-A165F Build/AP3A.240905.015.A2; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/143.0.7499.34 Mobile Safari/537.36",
+    "expiresAt": 1768225868295,
+    "remember": true,
+    "userData": {
+      "username": "GAGATAMPAN",
+      "role": "admin",
+      "expired": 2082807216687
+    },
+    "lastActive": 1767621068296
+  },
+  "ELZZ": {
+    "sessionId": "caba89bd83be91d3bbe2ae45a9e40329",
+    "loginTime": 1767489024715,
+    "userAgent": "Mozilla/5.0 (Linux; Android 11; 220233L2G Build/RP1A.200720.011; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/143.0.7499.35 Mobile Safari/537.36",
+    "expiresAt": 1768212868706,
+    "remember": true,
+    "userData": {
+      "username": "ELZZ",
+      "role": "user",
+      "expired": 2082848751091
+    },
+    "lastActive": 1767608068533
+  },
+  "rifki": {
+    "sessionId": "c41473979bb33dbe0a85da84d3ddd98c",
+    "loginTime": 1767521842276,
+    "userAgent": "Mozilla/5.0 (Linux; Android 15; Infinix X6871 Build/AP3A.240905.015.A2; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/144.0.7559.31 Mobile Safari/537.36",
+    "expiresAt": 1768183371749,
+    "remember": true,
+    "userData": {
+      "username": "rifki",
+      "role": "user",
+      "expired": 1776075067391
+    },
+    "lastActive": 1767578571656
+  },
+  "BISMA": {
+    "sessionId": "66b88ffcd677c9ccc86b901b8a80c1dc",
+    "loginTime": 1767534665409,
+    "userAgent": "Mozilla/5.0 (Linux; Android 15; V2434 Build/AP3A.240905.015.A2_CS_V000L1; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/143.0.7499.35 Mobile Safari/537.36",
+    "expiresAt": 1768214219128,
+    "remember": true,
+    "userData": {
+      "username": "BISMA",
+      "role": "user",
+      "expired": 2082894583921
+    },
+    "lastActive": 1767609415505
+  },
+  "celvin": {
+    "sessionId": "0999a1f8921e0b0777c8288ee420e657",
+    "loginTime": 1767537946239,
+    "userAgent": "Mozilla/5.0 (Linux; Android 14; TECNO KL4 Build/UP1A.231005.007; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/143.0.7499.34 Mobile Safari/537.36",
+    "expiresAt": 1768219097095,
+    "remember": true,
+    "userData": {
+      "username": "celvin",
+      "role": "user",
+      "expired": 1768142688417
+    },
+    "lastActive": 1767614251713
+  },
+  "Potzz": {
+    "sessionId": "4da01cac8d627182e027c4bf224bec83",
+    "loginTime": 1767540696735,
+    "userAgent": "Mozilla/5.0 (Linux; Android 15; Infinix X6873 Build/AP3A.240905.015.A2; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/143.0.7499.34 Mobile Safari/537.36",
+    "expiresAt": 1768227918571,
+    "remember": true,
+    "userData": {
+      "username": "Potzz",
+      "role": "owner",
+      "expired": 1776094280048
+    },
+    "lastActive": 1767623118478
+  },
+  "vanzy": {
+    "sessionId": "1ff43f73272b0412baa1a91a978e129f",
+    "loginTime": 1767540934872,
+    "userAgent": "Mozilla/5.0 (Linux; Android 13; Infinix X6525 Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/143.0.7499.116 Mobile Safari/537.36",
+    "expiresAt": 1768222158457,
+    "remember": true,
+    "userData": {
+      "username": "vanzy",
+      "role": "user",
+      "expired": 1775994594343
+    },
+    "lastActive": 1767617358458
+  },
+  "mask": {
+    "sessionId": "5ab03034871289d40aaf7752455ed85a",
+    "loginTime": 1767618040037,
+    "userAgent": "Mozilla/5.0 (Linux; Android 11; CPH2269 Build/RP1A.200720.011; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/143.0.7499.146 Mobile Safari/537.36",
+    "expiresAt": 1768223144795,
+    "remember": true,
+    "userData": {
+      "username": "mask",
+      "role": "user",
+      "expired": 1853931569538
+    },
+    "lastActive": 1767618344796
+  },
+  "KapotiD": {
+    "sessionId": "44698e9dfa19e7923da36ff366832993",
+    "loginTime": 1768153401613,
+    "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Mobile Safari/537.36",
+    "expiresAt": 1768239801613,
+    "remember": false,
+    "userData": {
+      "username": "KapotiD",
+      "role": "owner",
+      "expired": 1776702051943
+    },
+    "lastActive": 1768158331628
+  }
+}
