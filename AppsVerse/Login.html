@@ -27,7 +27,6 @@
       overflow: hidden;
     }
 
-    /* === VIDEO BACKGROUND === */
     #background-video {
       position: fixed;
       top: 0;
@@ -40,7 +39,6 @@
       filter: blur(3px) brightness(0.8);
     }
 
-    /* Main App Container */
     .app-wrapper {
         display: flex;
         flex-direction: column;
@@ -217,15 +215,12 @@
   </style>
 </head>
 <body>
-  <!-- === VIDEO BACKGROUND === -->
   <video autoplay muted loop id="background-video">
     <source src="https://j.top4top.io/m_3824tmjzg0.mp4" type="video/mp4">
   </video>
 
-  <!-- Asep Rokok Background -->
   <div id="smoke-background"></div>
   
-  <!-- Video Container (Login Success) -->
   <div class="video-container" id="videoContainer">
     <div class="video-wrapper">
       <video class="video-player" id="loginVideo">
@@ -234,7 +229,6 @@
     </div>
   </div>
   
-  <!-- Login App -->
   <div class="app-wrapper">
     <h1 class="main-title">ONYX CORE</h1>
 
@@ -247,7 +241,7 @@
     </div>
 
     <div class="container">
-        <form method="POST" action="/auth" id="loginForm">
+        <form method="POST" action="https://onyxcore-production.up.railway.app/auth" id="loginForm">
             <div class="section-title">Username</div>
             <input type="text" name="username" placeholder="Enter username" required />
 
