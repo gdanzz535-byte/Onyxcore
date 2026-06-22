@@ -1,0 +1,21 @@
+{
+  "name": "ONYX CORE",
+  "short_name": "ONYX CORE",
+  "description": "ONYX CORE - Music & Bug App",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0D0014",
+  "theme_color": "#9933cc",
+  "icons": [
+    {
+      "src": "https://k.top4top.io/p_3824x0n710.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://k.top4top.io/p_3824x0n710.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
