@@ -1,0 +1,1705 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MY SENDER FAISAL CRASHER V4</title>
+    
+    <!-- Load Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- VARIABLES --- */
+        :root {
+            /* WARNA BACKGROUND: HITAM dengan RED TINT */
+            --bg-dark: #050505;       
+            --bg-gradient: radial-gradient(circle at 50% 0%, #1a0505 0%, #000000 80%);
+            
+            --card-bg: rgba(30, 30, 30, 0.7); /* Abu Gelap Transparan */
+            --glass-border: rgba(255, 0, 0, 0.2); /* Border Merah Transparan */
+            
+            /* WARNA UTAMA DIUBAH KE MERAH & ABU */
+            --accent-pink: #ff3333;   /* Merah Terang */
+            --accent-purple: #800000; /* Merah Gelap */
+            
+            /* Other Accents Disesuaikan tema Merah/Abu */
+            --accent-blue: #4a4a4a; /* Abu Gelap (pengganti biru) */
+            --accent-green: #2ed573; /* Hijau (tetap kontras) */
+            --accent-red: #ff0000;    /* Merah Pure */
+            --accent-orange: #cc0000; /* Merah Tua */
+            --accent-cyan: #b0b0b0;   /* Abu Silver (Support Text) */
+            
+            --text-gray: #888888; 
+            --text-light: #e8e8e8;
+            
+            /* Fonts */
+            --font-title: 'Share Tech Mono', sans-serif;
+            --font-code: 'Share Tech Mono', monospace;
+            --font-head: 'Orbitron', sans-serif;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            outline: none; 
+        }
+        
+        body {
+            background-color: var(--bg-dark);
+            background-image: var(--bg-gradient);
+            color: #ffffff;
+            font-family: var(--font-code);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+            padding-bottom: 90px;
+        }
+
+        /* --- PARTICLES (RED) --- */
+        #particle-container {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            z-index: -1; 
+            pointer-events: none; 
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            background: rgba(220, 20, 60, 0.5); /* Merah Darah */
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(255, 0, 0, 0.3);
+            animation: floatUp linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+        }
+
+        /* --- HEADER --- */
+        header {
+            display: flex; 
+            align-items: center; 
+            gap: 16px; 
+            padding: 20px 25px; 
+            padding-top: 40px; 
+            background: rgba(5, 5, 5, 0.9); /* Glass effect solid */
+            backdrop-filter: blur(10px);
+            z-index: 50;
+            border-bottom: 1px solid rgba(255, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+        }
+        
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 0, 0, 0.5) 50%, transparent 100%);
+        }
+
+        .back-btn {
+            color: #fff;
+            background: rgba(255,255,255,0.05);
+            width: 35px; 
+            height: 35px;
+            border-radius: 10px;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .back-btn:hover {
+            background: var(--accent-pink); 
+            border-color: var(--accent-pink);
+            transform: translateX(-3px);
+        }
+
+        .brand-title { 
+            font-family: var(--font-head);
+            font-size: 18px; 
+            font-weight: 700; 
+            letter-spacing: 1px; 
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+        }
+
+        /* --- MAIN CONTENT --- */
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* --- GLASS CARDS --- */
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5); 
+            margin-bottom: 25px;
+            position: relative;
+            overflow: visible;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .section-title {
+            font-family: var(--font-title);
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        .section-icon { 
+            color: var(--accent-pink); 
+            font-size: 18px; 
+        }
+
+        /* --- PROMO BANNER (RED THEME) --- */
+        .promo-banner {
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.2), rgba(100, 0, 0, 0.2));
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform: perspective(1000px) rotateX(0deg) rotateY(-2deg);
+        }
+
+        .promo-banner:hover {
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.2);
+        }
+
+        .promo-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .promo-icon {
+            font-size: 24px;
+            color: var(--accent-cyan);
+            text-shadow: 0 0 15px rgba(176, 176, 176, 0.5);
+        }
+
+        .promo-text h4 {
+            color: #fff;
+            font-family: var(--font-head);
+            font-size: 14px;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .promo-text p {
+            color: var(--text-light);
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .promo-badge {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(255, 0, 0, 0.4);
+            z-index: 2;
+            font-family: var(--font-head);
+            text-transform: uppercase;
+        }
+
+        /* --- GUIDE BUTTON --- */
+        .guide-btn-container {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0 25px 0;
+        }
+
+        .guide-btn {
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.2), rgba(100, 0, 0, 0.2));
+            border: 1px solid rgba(255, 0, 0, 0.4);
+            border-radius: 50px;
+            padding: 10px 20px;
+            color: var(--accent-cyan);
+            font-family: var(--font-head);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .guide-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .guide-btn:hover::before {
+            left: 100%;
+        }
+
+        .guide-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.3), rgba(100, 0, 0, 0.3));
+            border-color: var(--accent-pink);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+
+        /* --- FORM ELEMENTS --- */
+        .input-group { 
+            margin-bottom: 15px; 
+        }
+
+        .input-label {
+            font-family: var(--font-code);
+            font-size: 12px;
+            color: var(--text-gray);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .indictive-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 15px;
+            color: #fff;
+            font-family: var(--font-code);
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .indictive-input:focus {
+            border-color: var(--accent-pink);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+        }
+
+        /* --- CUSTOM DROPDOWN --- */
+        .custom-dropdown { 
+            position: relative; 
+            width: 100%; 
+            z-index: 100; 
+        }
+
+        .dropdown-trigger {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 15px;
+            color: #fff;
+            cursor: pointer;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            transition: 0.3s;
+        }
+        
+        .dropdown-trigger:hover { 
+            border-color: var(--accent-purple); 
+        }
+        
+        .dropdown-menu {
+            position: absolute; 
+            top: 110%; 
+            left: 0; 
+            width: 100%;
+            background: #111; /* Hitam pekat */
+            border: 1px solid var(--accent-purple);
+            border-radius: 12px;
+            max-height: 250px; 
+            overflow-y: auto;
+            opacity: 0; 
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            z-index: 1000;
+        }
+
+        .custom-dropdown.active .dropdown-menu { 
+            opacity: 1; 
+            visibility: visible; 
+            transform: translateY(0); 
+        }
+
+        .dropdown-item {
+            padding: 12px 15px;
+            display: flex; 
+            align-items: center; 
+            gap: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: 0.2s; 
+            color: var(--text-gray); 
+            font-size: 13px;
+        }
+
+        .dropdown-item:hover { 
+            background: rgba(255, 0, 0, 0.1); 
+            color: #fff; 
+            padding-left: 20px; 
+        }
+        .dropdown-item.selected { 
+            background: rgba(255, 0, 0, 0.15); 
+            color: var(--accent-pink); 
+            font-weight: bold; 
+        }
+
+        /* --- BUTTONS --- */
+        .btn-core {
+            width: 100%; 
+            padding: 15px;
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            border: none; 
+            border-radius: 12px;
+            color: white;
+            font-family: var(--font-title); 
+            font-weight: 700; 
+            font-size: 14px; 
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+            transition: 0.3s;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 8px;
+        }
+        .btn-core:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.6);
+        }
+
+        /* --- SENDER LIST --- */
+        .senders-list-container {
+            margin-top: 20px;
+        }
+
+        .sender-item {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 12px;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            transition: 0.3s;
+        }
+        
+        .sender-item:hover { 
+            border-color: var(--accent-blue); 
+            transform: translateX(5px); 
+        }
+
+        .sender-info { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+        }
+
+        .sender-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .sender-status.connected { 
+            background: var(--accent-green); 
+            box-shadow: 0 0 8px var(--accent-green); 
+        }
+        .sender-status.connecting { 
+            background: var(--accent-orange); 
+            box-shadow: 0 0 8px var(--accent-orange); 
+            animation: pulse 2s infinite;
+        }
+        .sender-status.waiting_pairing { 
+            background: var(--accent-blue); 
+            box-shadow: 0 0 8px var(--accent-blue); 
+            animation: pulse 1.5s infinite;
+        }
+        .sender-status.disconnected, 
+        .sender-status.error { 
+            background: var(--accent-red); 
+            box-shadow: 0 0 8px var(--accent-red); 
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .sender-number { 
+            font-size: 14px; 
+            color: #fff; 
+            font-family: var(--font-head);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-trash {
+            width: 35px; 
+            height: 35px;
+            background: rgba(255, 0, 0, 0.15); /* Merah transparan */
+            color: var(--accent-red);
+            border-radius: 8px;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        .btn-trash:hover { 
+            background: var(--accent-red); 
+            color: white; 
+            transform: scale(1.1);
+        }
+
+        /* --- MODAL STYLES --- */
+        .modal-overlay {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: rgba(0,0,0,0.9); /* Lebih gelap */
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            opacity: 0; 
+            visibility: hidden; 
+            transition: 0.3s;
+        }
+        .modal-overlay.active { 
+            opacity: 1; 
+            visibility: visible; 
+        }
+        
+        .modal-card {
+            background: #0a0202; /* Sangat gelap red tint */
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            box-shadow: 0 0 40px rgba(0,0,0,0.9);
+            border-radius: 24px;
+            padding: 30px;
+            width: 90%; 
+            max-width: 500px;
+            text-align: center;
+            transform: scale(0.9); 
+            transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .modal-overlay.active .modal-card { 
+            transform: scale(1); 
+        }
+
+        /* Guide Modal Specific */
+        .guide-modal .modal-card {
+            max-width: 600px;
+            text-align: left;
+        }
+
+        .guide-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .guide-icon {
+            font-size: 30px;
+            color: var(--accent-pink);
+            text-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+        }
+
+        .guide-title {
+            font-family: var(--font-head);
+            font-size: 18px;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        .guide-content {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .guide-step {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--accent-pink);
+        }
+
+        .step-number {
+            display: inline-block;
+            background: var(--accent-green);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 32%;
+            text-align: center;
+            line-height: 27px;
+            font-weight: bold;
+            margin-right: 2px;
+            font-family: var(--font-head);
+        }
+
+        .step-title {
+            display: inline-block;
+            color: #fff;
+            font-family: var(--font-head);
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .step-description {
+            color: var(--text-light);
+            font-size: 13px;
+            line-height: 1.5;
+            margin-left: 38px;
+        }
+
+        .step-description strong {
+            color: var(--accent-cyan);
+        }
+
+        .guide-note {
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .note-title {
+            color: var(--accent-orange);
+            font-family: var(--font-head);
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .note-text {
+            color: var(--text-light);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .close-guide-btn {
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-family: var(--font-title);
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 25px;
+            width: 100%;
+        }
+
+        .close-guide-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+        }
+
+        /* Pairing Modal */
+        .code-display {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--accent-pink);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: var(--font-head);
+            font-size: 32px;
+            color: #fff;
+            letter-spacing: 4px;
+            text-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .modal-instructions {
+            text-align: left;
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid var(--accent-pink);
+        }
+
+        .modal-instructions h4 {
+            color: var(--accent-pink);
+            margin-bottom: 10px;
+            font-family: var(--font-head);
+            font-size: 14px;
+        }
+
+        .modal-instructions ol {
+            color: var(--text-light);
+            padding-left: 20px;
+            font-size: 12px;
+        }
+
+        .modal-instructions li {
+            margin-bottom: 8px;
+        }
+
+        .modal-warning {
+            color: var(--accent-orange);
+            font-size: 12px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-copy {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-family: var(--font-title);
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-copy:hover {
+            background: var(--accent-purple);
+            transform: translateY(-2px);
+        }
+
+        .btn-copy.copied {
+            background: var(--accent-green);
+            color: #000;
+            animation: pulseSuccess 0.5s;
+        }
+
+        @keyframes pulseSuccess {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .btn-close {
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-family: var(--font-title);
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-close:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+        }
+
+        /* Delete Modal */
+        .modal-card.delete-theme {
+            border-color: var(--accent-red);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+        }
+
+        .icon-box-danger {
+            width: 60px; 
+            height: 60px;
+            background: rgba(255, 0, 0, 0.15);
+            color: var(--accent-red);
+            border-radius: 50%;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 15px auto;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            animation: pulseRed 2s infinite;
+        }
+
+        @keyframes pulseRed {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+        }
+
+        .modal-actions {
+            display: flex; 
+            gap: 10px; 
+            margin-top: 25px;
+        }
+
+        .btn-cancel {
+            flex: 1; 
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: var(--font-title);
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .btn-delete-confirm {
+            flex: 1; 
+            padding: 12px;
+            background: linear-gradient(135deg, #ff4757, #cc2e3c);
+            border: none;
+            color: #fff;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: var(--font-title);
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+            transition: 0.3s;
+        }
+
+        .btn-delete-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.6);
+        }
+
+        /* --- NOTIFICATION TOAST --- */
+        .notification-toast {
+            position: fixed; 
+            top: -60px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            background: rgba(26, 11, 46, 0.95);
+            color: var(--accent-pink);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-family: var(--font-title);
+            font-weight: 700;
+            z-index: 2000;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+            white-space: nowrap;
+        }
+        .notification-toast.show { 
+            top: 20px; 
+        }
+
+        .notification-toast.success {
+            color: var(--accent-green);
+            border-color: rgba(46, 213, 115, 0.3);
+        }
+
+        .notification-toast.error {
+            color: var(--accent-red);
+            border-color: rgba(255, 0, 0, 0.3);
+        }
+
+        .notification-toast.info {
+            color: var(--accent-blue);
+            border-color: rgba(74, 74, 74, 0.3);
+        }
+
+        /* --- LOADING & NO DATA --- */
+        .loading-text, .no-senders {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-gray);
+            font-style: italic;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .glass-card {
+                padding: 15px;
+            }
+            
+            .code-display {
+                font-size: 24px;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+            }
+            
+            .promo-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .guide-modal .modal-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="particle-container"></div>
+
+    <header>
+        <a href="/dashboard" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="brand-title">MY SENDERS</div>
+    </header>
+
+    <div class="container">
+        
+        <!-- CARD 1: ADD SENDER -->
+        <div class="glass-card">
+            <div class="section-header">
+                <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#ff3333"><path d="M207.54-287.54q-56.23-58.08-84.19-128T95.39-560q0-74.54 27.96-144.46t84.19-128l37.23 37.23Q196-746.08 172-684.54 148-623 148-560q0 63 24 124.54 24 61.54 72.77 110.69l-37.23 37.23ZM302-382q-36.69-37.46-55.65-83.77-18.96-46.31-18.96-94.23t18.96-94.23Q265.31-700.54 302-738l37.23 37.23q-29.61 27.77-44.42 64.96Q280-598.62 280-560q0 36.77 14.62 73.77 14.61 37 44.61 67L302-382Zm-.46 268.92 125.77-377.31q-16.77-12.07-26.27-30.49-9.5-18.43-9.5-39.12 0-37 25.73-62.73Q443-648.46 480-648.46t62.73 25.73Q568.46-597 568.46-560q0 20.69-9.11 38.73-9.12 18.04-26.66 30.88l125.77 377.31h-60.77l-26-80H388.92l-26.23 80h-61.15Zm107.23-140h142.46L480-466.93l-71.23 213.85ZM658-382l-37.23-37.23q29.61-27.77 44.42-64.96Q680-521.38 680-560q0-35.62-14.81-73t-44.42-67.77L658-738q36.69 37.46 54.73 84.15 18.04 46.7 19.88 94.23 0 47.93-18.76 94.04Q695.08-419.46 658-382Zm94.46 94.46-37.23-37.23Q764-373.92 788-435.46 812-497 812-560q0-63-24-124.54-24-61.54-72.77-110.69l37.23-37.23q55.85 58.08 84 128T864.61-560q0 74.54-26.84 144.46-26.85 69.92-85.31 128Z"/></svg>
+                <span class="section-title">NEW CONNECTION</span>
+            </div>
+
+            <!-- Promo Banner (Ganti Panduan) -->
+            <div class="promo-banner" onclick="openGuideModal()">
+                <span class="promo-badge">NEW</span>
+                <div class="promo-content">
+                    <div class="promo-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="promo-text">
+                        <h4>LEARN HOW TO CONNECT</h4>
+                        <p>Step-by-step guide to link your WhatsApp device securely</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guide Button -->
+            <div class="guide-btn-container">
+                <button class="guide-btn" onclick="openGuideModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M480-184.62q-48.38-35.69-104.38-55.15-56-19.46-115.62-19.46-36.61 0-71.92 8.11Q152.77-243 120-227.23q-21.38 9.84-40.69-3.12T60-267.08v-434.3q0-12.93 6.66-24.27Q73.31-737 85.85-742q40.61-19.77 84.65-29.27 44.04-9.5 89.5-9.5 69.77 0 121.19 16.81t107.96 50.65q10.23 5.62 15.54 14 5.31 8.39 5.31 20.62v406.08q46.31-24.08 93.31-35.35 47-11.27 96.69-11.27 36 0 67.62 5.23 31.61 5.23 60.07 14.92 4.62 1.93 8.46-.57 3.85-2.5 3.85-7.89v-449.07q9.23 3.07 18.15 6.77 8.93 3.69 17.54 8.61 12.15 5.38 18.23 16.35 6.08 10.96 6.08 23.5v434.3q0 23.77-20.08 36.35-20.08 12.57-42.23 2.73-32.38-15.39-67.11-23.31-34.73-7.92-70.58-7.92-59.62 0-115.62 19.46-56 19.46-104.38 55.15ZM613.85-400v-420l122.3-40v420l-122.3 40Z"/></svg> PANDUAN LENGKAP
+                </button>
+            </div>
+
+            <!-- Form Input -->
+            <div class="add-sender-form">
+                <div class="input-group">
+                    <label class="input-label">COUNTRY CODE</label>
+                    <div class="custom-dropdown" id="countryDropdown">
+                        <input type="hidden" id="selectedCountryCode" value="60">
+                        <div class="dropdown-trigger">
+                            <span id="triggerText">🇲🇾 +60 malaysia</span>
+                            <i class="fas fa-chevron-down" style="font-size: 10px; color: var(--accent-pink);"></i>
+                        </div>
+                        <div class="dropdown-menu" id="countryMenu">
+                            <!-- Options will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">PHONE NUMBER</label>
+                    <input type="text" id="newSenderNumber" class="indictive-input" 
+                           placeholder="Contoh: 60111×××" autocomplete="off">
+                </div>
+
+                <button type="button" id="addSenderBtn" class="btn-core">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="26px" viewBox="0 -960 960 960" width="26px" fill="#FFFFFF"><path d="M757.31-100.77q-60.23 0-102.81-42.58-42.58-42.57-42.58-102.8v-180q0-36.83 25.43-62.27 25.43-25.43 62.27-25.43 36.83 0 62.26 25.43 25.43 25.43 25.43 62.27v180h-60v-180q0-11.47-8.12-19.58-8.11-8.12-19.57-8.12-11.47 0-19.58 8.12-8.12 19.58v180q0 35.22 25.1 60.3t60.35 25.08q35.25 0 60.28-25.08 25.04-25.08 25.04-60.3v-160h60v160q0 60.23-42.58 102.8-42.57 42.58-102.8 42.58ZM129.62-260q-29.83 0-51.07-21.24-21.24-21.24-21.24-51.07v-455.38q0-29.83 21.24-51.07Q99.79-860 129.62-860H745q29.83 0 51.07 21.24 21.24 21.24 51.07v235.38H699.62q-52.91 0-90.3 36.77-37.4 36.77-37.4 89.39V-260h-442.3Zm307.69-277.69 320-204.62-6.16-57.69-313.84 200-313.85-200-6.15 57.69 320 204.62Z"/></svg> GET CODE
+                </button>
+            </div>
+        </div>
+
+        <!-- CARD 2: LIST SENDERS -->
+        <div class="glass-card">
+            <div class="section-header">
+                <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#2ed573"><path d="M720.77-180v-80h-80v-60h80v-80h60v80h-60ZM118.23-536l-70.77-70.77q87.77-83.61 199.43-128.42Q358.54-780 480-780q121.46 0 233.11 44.81 111.66 44.81 199.43 128.42L841.77-536q-73.46-69.69-166.97-106.85Q581.29-680 479.99-680t-194.8 37.15Q191.69-605.69 118.23-536ZM480-180q-29.15 0-49.58-20.42Q410-220.85 410-250t20.42-49.58Q450.85-320 480-320t49.58 20.42Q550-279.15 550-250t-20.42 49.58Q509.15-180 480-180ZM283-372l-70.15-70.15q54.77-51.93 123.53-79.7 68.77-27.76 143.62-27.76 60.22 0 116.46 17.92 56.23 17.92 104.85 51.77-28.7 6.15-53.62 21.46-24.92 15.31-44.08 36.69-28.78-13.44-59.96-20.64-31.19-7.21-63.65-7.21-55.77 0-106.15 20-50.39 20-90.85 57.62Z"/></svg>
+                <span class="section-title">ACTIVE NODES</span>
+            </div>
+            
+            <div class="senders-list-container">
+                <div id="sendersList" class="senders-list">
+                    <div class="loading-text"><i class="fas fa-spinner fa-spin"></i> Memuat sender...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: GUIDE -->
+    <div class="modal-overlay guide-modal" id="guideModal">
+        <div class="modal-card">
+            <div class="guide-header">
+                <div class="guide-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="guide-title">FAISAL CRASHER V4 - PANDUAN LENGKAP CONNECT SENDER</div>
+            </div>
+            
+            <div class="guide-content">
+                <div class="guide-step">
+                    <span class="step-number">1</span>
+                    <span class="step-title">PILIH KODE NEGARA</span>
+                    <p class="step-description">
+                        Pilih <strong>kode negara</strong> dari dropdown (Contoh: +60 untuk malaysia, +62 untuk indonesia)
+                    </p>
+                </div>
+                
+                <div class="guide-step">
+                    <span class="step-number">2</span>
+                    <span class="step-title">MASUKAN NOMOR WHATSAPP</span>
+                    <p class="step-description">
+                        Masukkan <strong>nomor WhatsApp</strong> tanpa kode negara (Contoh: 81234567890, 15551234567)
+                    </p>
+                </div>
+                
+                <div class="guide-step">
+                    <span class="step-number">3</span>
+                    <span class="step-title">KLIK "GET CODE"</span>
+                    <p class="step-description">
+                        Klik tombol <strong>"GET CODE"</strong>. Sistem akan memproses dan menampilkan <strong>Kode Pairing</strong> unik
+                    </p>
+                </div>
+                
+                <div class="guide-step">
+                    <span class="step-number">4</span>
+                    <span class="step-title">BUKA WHATSAPP DI HP</span>
+                    <p class="step-description">
+                        Buka aplikasi <strong>WhatsApp</strong> di smartphone Anda
+                    </p>
+                </div>
+                
+                <div class="guide-step">
+                    <span class="step-number">5</span>
+                    <span class="step-title">BUKA LINKED DEVICES</span>
+                    <p class="step-description">
+                        Navigasi ke menu <strong>Linked Devices</strong> (Perangkat Tertaut) di pengaturan WhatsApp
+                    </p>
+                </div>
+                
+                <div class="guide-step">
+                    <span class="step-number">6</span>
+                    <span class="step-title">TAUTKAN PERANGKAT</span>
+                    <p class="step-description">
+                        Pilih <strong>Link a Device</strong> (Tautkan Perangkat) dan masukkan <strong>Kode Pairing</strong> yang muncul di layar ini
+                    </p>
+                </div>
+                
+                <div class="guide-step">
+                    <span class="step-number">7</span>
+                    <span class="step-title">KONFIRMASI KONEKSI</span>
+                    <p class="step-description">
+                        Setelah terhubung, status sender akan berubah menjadi <strong>Connected</strong>. Siap digunakan!
+                    </p>
+                </div>
+                
+                <div class="guide-note">
+                    <div class="note-title">
+                        <i class="fas fa-lightbulb"></i> TIPS PENTING
+                    </div>
+                    <p class="note-text">
+                        • Pastikan WhatsApp di smartphone aktif dan terhubung ke internet<br>
+                        • Kode pairing hanya berlaku selama 30 detik<br>
+                        • Jangan bagikan kode pairing ke siapapun<br>
+                        • Satu nomor WhatsApp hanya bisa terhubung dengan satu sender<br>
+                        • Untuk keamanan, hapus sender jika tidak digunakan lagi
+                    </p>
+                </div>
+            </div>
+            
+            <button class="close-guide-btn" onclick="closeGuideModal()">
+                <i class="fas fa-check-circle"></i> SAYA MENGERTI
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL: PAIRING CODE -->
+    <div class="modal-overlay" id="pairingModal">
+        <div class="modal-card">
+            <div style="color: var(--accent-pink); font-size: 40px; margin-bottom: 15px;">
+                <i class="fas fa-qrcode"></i>
+            </div>
+            <h3 style="color: #fff; font-family: var(--font-head); letter-spacing: 1px;">
+                KODE PAIRING WHATSAPP
+            </h3>
+            
+            <div class="code-display">
+                <div class="code-text" id="pairingCodeValue">--- ---</div>
+                <button class="btn-copy" id="copyCodeBtn">
+                    <i class="fas fa-copy"></i> COPY
+                </button>
+            </div>
+            
+            <div class="modal-instructions">
+                <h4>Langkah Cepat:</h4>
+                <ol>
+                    <li>Buka <b>WhatsApp</b> > <b>Linked Devices</b></li>
+                    <li>Pilih <b>Link a Device</b> (Tautkan Perangkat)</li>
+                    <li>Masukkan kode: <strong id="displayCode"></strong></li>
+                    <li>Kode berlaku <b>30 detik!</b></li>
+                </ol>
+            </div>
+            
+            <div class="modal-warning">
+                <i class="fas fa-shield-alt"></i>
+                JANGAN berikan kode ini ke siapapun!
+            </div>
+            
+            <button class="btn-close" id="closeModalBtn">
+                <i class="fas fa-times-circle"></i> SAYA MENGERTI
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL: DELETE CONFIRMATION -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-card delete-theme">
+            <div class="icon-box-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3 style="color: #fff; font-family: var(--font-head); font-size: 18px; letter-spacing: 1px;">
+                HAPUS SENDER?
+            </h3>
+            <p style="color: var(--text-gray); font-size: 12px; margin-top: 10px; line-height: 1.5;" id="deleteMessage">
+                Apakah Anda yakin ingin menghapus sender ini?
+            </p>
+            
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeDeleteModal()">BATAL</button>
+                <button class="btn-delete-confirm" id="btnConfirmDelete">HAPUS</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICATION TOAST -->
+    <div id="notifToast" class="notification-toast">
+        <i class="fas fa-info-circle"></i> <span id="notifText">Message</span>    </div>
+
+    <script>    // Global variables  
+    let currentPairingCode = null;  
+    let numberToDelete = null;  
+    let eventSource = null;  
+
+    // Function untuk menampilkan notifikasi  
+    function showNotification(message, type = 'info') {  
+        const toast = document.getElementById('notifToast');  
+        const text = document.getElementById('notifText');  
+          
+        text.textContent = message;  
+          
+        // Reset classes  
+        toast.className = 'notification-toast';  
+        toast.classList.add(type);  
+          
+        // Show toast  
+        toast.classList.add('show');  
+          
+        // Auto hide setelah 5 detik  
+        setTimeout(() => {  
+            toast.classList.remove('show');  
+        }, 5000);  
+    }  
+
+    // Initialize particles (Red)
+    function initParticles() {  
+        const container = document.getElementById('particle-container');  
+        for (let i = 0; i < 35; i++) {  
+            const particle = document.createElement('div');  
+            particle.classList.add('particle');  
+            particle.style.width = Math.random() * 3 + 2 + 'px';  
+            particle.style.height = particle.style.width;  
+            particle.style.left = Math.random() * 100 + 'vw';  
+            particle.style.top = Math.random() * 100 + 'vh';  
+            particle.style.animationDuration = Math.random() * 15 + 10 + 's';  
+            container.appendChild(particle);  
+        }  
+    }  
+
+    // Initialize country dropdown — VERSI TERBARU: URUT A-Z + NEGARA BARU
+    function initCountryDropdown() {
+        const countries = [
+            { value: '93', flag: '🇦🇫', name: 'Afghanistan' },
+            { value: '244', flag: '🇦🇴', name: 'Angola' },
+            { value: '61', flag: '🇦🇺', name: 'Australia' },
+            { value: '973', flag: '🇧🇭', name: 'Bahrain' },
+            { value: '880', flag: '🇧🇩', name: 'Bangladesh' },
+            { value: '673', flag: '🇧🇳', name: 'Brunei Darussalam' },
+            { value: '55', flag: '🇧🇷', name: 'Brazil' },
+            { value: '237', flag: '🇨🇲', name: 'Cameroon' },
+            { value: '86', flag: '🇨🇳', name: 'China' },
+            { value: '269', flag: '🇰🇲', name: 'Comoros' },
+            { value: '225', flag: '🇨🇮', name: "Côte d'Ivoire" },
+            { value: '33', flag: '🇫🇷', name: 'France' },
+            { value: '49', flag: '🇩🇪', name: 'Germany' },
+            { value: '91', flag: '🇮🇳', name: 'India' },
+            { value: '62', flag: '🇮🇩', name: 'Indonesia' },
+            { value: '98', flag: '🇮🇷', name: 'Iran' },
+            { value: '972', flag: '🇮🇱', name: 'Israel' },
+            { value: '39', flag: '🇮🇹', name: 'Italy' },
+            { value: '81', flag: '🇯🇵', name: 'Japan' },
+            { value: '60', flag: '🇲🇾', name: 'Malaysia' },
+            { value: '95', flag: '🇲🇲', name: 'Myanmar' },
+            { value: '977', flag: '🇳🇵', name: 'Nepal' },
+            { value: '31', flag: '🇳🇱', name: 'Netherlands' },
+            { value: '234', flag: '🇳🇬', name: 'Nigeria' },
+            { value: '47', flag: '🇳🇴', name: 'Norway' },
+            { value: '92', flag: '🇵🇰', name: 'Pakistan' },
+            { value: '63', flag: '🇵🇭', name: 'Philippines' },
+            { value: '974', flag: '🇶🇦', name: 'Qatar' },
+            { value: '7', flag: '🇷🇺', name: 'Russia' },
+            { value: '966', flag: '🇸🇦', name: 'Saudi Arabia' },
+            { value: '65', flag: '🇸🇬', name: 'Singapore' },
+            { value: '82', flag: '🇰🇷', name: 'South Korea' },
+            { value: '94', flag: '🇱🇰', name: 'Sri Lanka' },
+            { value: '66', flag: '🇹🇭', name: 'Thailand' },
+            { value: '34', flag: '🇪🇸', name: 'Spain' },
+            { value: '90', flag: '🇹🇷', name: 'Turkey' },
+            { value: '971', flag: '🇦🇪', name: 'United Arab Emirates' },
+            { value: '44', flag: '🇬🇧', name: 'United Kingdom' },
+            { value: '1', flag: '🇺🇸', name: 'United States / Canada' },
+            { value: '58', flag: '🇻🇪', name: 'Venezuela' },
+            { value: '84', flag: '🇻🇳', name: 'Vietnam' }
+        ];
+
+        // Urutkan alfabetis berdasarkan nama negara
+        countries.sort((a, b) => a.name.localeCompare(b.name));
+
+        const dropdown = document.getElementById('countryDropdown');
+        const trigger = dropdown.querySelector('.dropdown-trigger');
+        const triggerText = document.getElementById('triggerText');
+        const hiddenInput = document.getElementById('selectedCountryCode');
+        const menu = document.getElementById('countryMenu');
+
+        // Kosongkan menu dulu
+        menu.innerHTML = '';
+
+        // Populate dropdown - PERBAIKAN DI SINI
+        countries.forEach(country => {
+            const item = document.createElement('div');
+            item.className = 'dropdown-item';
+            if (country.value === '62') item.classList.add('selected');
+            item.setAttribute('data-value', country.value);
+            // PERBAIKAN: Template string yang benar
+            item.innerHTML = `${country.flag} +${country.value} ${country.name}`;
+            menu.appendChild(item);
+        });
+
+        const items = menu.querySelectorAll('.dropdown-item');
+
+        // Open/close dropdown
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle('active');
+        });
+
+        // Handle selection
+        items.forEach(item => {
+            item.addEventListener('click', () => {
+                items.forEach(i => i.classList.remove('selected'));
+                item.classList.add('selected');
+                hiddenInput.value = item.getAttribute('data-value');
+                triggerText.innerHTML = item.innerHTML;
+                dropdown.classList.remove('active');
+            });
+        });
+
+        // Close when clicking outside
+        window.addEventListener('click', () => {
+            dropdown.classList.remove('active');
+        });
+
+        // Set default trigger text ke Indonesia
+        const defaultItem = menu.querySelector('.dropdown-item.selected');
+        if (defaultItem) {
+            triggerText.innerHTML = defaultItem.innerHTML;
+        } else {
+            // Fallback jika tidak ada default
+            triggerText.innerHTML = '🇲🇾 +60 Malaysia';
+        }
+    }
+
+    // Guide Modal Functions  
+    function openGuideModal() {  
+        const modal = document.getElementById('guideModal');  
+        modal.classList.add('active');  
+    }  
+
+    function closeGuideModal() {  
+        const modal = document.getElementById('guideModal');  
+        modal.classList.remove('active');  
+    }  
+
+    // Real-time events untuk pairing code  
+    function initEventStream() {  
+        if (eventSource) {  
+            eventSource.close();  
+        }  
+          
+        eventSource = new EventSource('/api/events');  
+          
+        eventSource.onmessage = function(event) {  
+            try {  
+                const data = JSON.parse(event.data);  
+                console.log('Received event:', data);  
+                  
+                switch(data.type) {  
+                    case 'status':  
+                        showNotification(`${data.number}: ${data.message}`, 'info');  
+                        updateSenderStatus(data.number, data.status);  
+                        break;  
+                          
+                    case 'pairing_code':  
+                        showPairingCodeModal(data);  
+                        updateSenderStatus(data.number, data.status);  
+                        break;  
+                          
+                    case 'success':  
+                        showNotification(`✓ ${data.message}`, 'success');  
+                        updateSenderStatus(data.number, data.status);  
+                        loadUserSenders();  
+                        break;  
+                          
+                    case 'error':  
+                        showNotification(`✗ ${data.message}`, 'error');  
+                        updateSenderStatus(data.number, data.status);  
+                        break;  
+                          
+                    case 'connected':  
+                        showNotification(`✅ ${data.message}`, 'success');  
+                        updateSenderStatus(data.number, data.status);  
+                        loadUserSenders();  
+                        break;  
+                          
+                    case 'qr':  
+                        showNotification(`📱 ${data.message}`, 'info');  
+                        updateSenderStatus(data.number, data.status);  
+                        break;  
+                }  
+            } catch (e) {  
+                console.error('Error parsing event data:', e);  
+            }  
+        };          
+        eventSource.onerror = function(err) {  
+            console.error('EventSource error:', err);  
+            setTimeout(initEventStream, 5000);  
+        };  
+    }  
+
+    // Function untuk menampilkan modal pairing code  
+    function showPairingCodeModal(data) {  
+        const modal = document.getElementById('pairingModal');  
+        const codeValue = document.getElementById('pairingCodeValue');  
+        const displayCode = document.getElementById('displayCode');  
+          
+        currentPairingCode = data.code;  
+        const formattedCode = data.code || '--- ---';  
+        
+        codeValue.textContent = formattedCode;  
+        displayCode.textContent = formattedCode;  
+          
+        modal.classList.add('active');  
+    }  
+
+    // Function untuk menutup modal pairing code  
+    function closePairingModal() {  
+        const modal = document.getElementById('pairingModal');  
+        modal.classList.remove('active');  
+        currentPairingCode = null;  
+    }  
+
+    // Fallback copy function untuk browser lama atau HTTP
+    function fallbackCopyText(text) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        
+        // Styling agar tidak terlihat
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (err) {
+            console.error('Fallback copy error:', err);
+            return false;
+        } finally {
+            document.body.removeChild(textArea);
+        }
+    }
+
+    // Function untuk menyalin kode pairing - PERBAIKAN DENGAN FALLBACK
+    function copyPairingCode() {
+        if (!currentPairingCode) {
+            showNotification('Tidak ada kode untuk disalin!', 'error');
+            return;
+        }
+        
+        const textToCopy = currentPairingCode.replace(/-/g, '');
+        
+        // Method 1: Menggunakan Clipboard API modern
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    showCopySuccess();
+                })
+                .catch(err => {
+                    // Fallback ke method 2 jika Clipboard API gagal
+                    console.error('Clipboard API error:', err);
+                    const fallbackSuccess = fallbackCopyText(textToCopy);
+                    if (fallbackSuccess) {
+                        showCopySuccess();
+                    } else {
+                        showNotification('Gagal menyalin kode!', 'error');
+                    }
+                });
+        } else {
+            // Method 2: Fallback untuk HTTP atau browser lama
+            const fallbackSuccess = fallbackCopyText(textToCopy);
+            if (fallbackSuccess) {
+                showCopySuccess();
+            } else {
+                showNotification('Browser tidak mendukung salin otomatis', 'error');
+            }
+        }
+    }
+
+    function showCopySuccess() {
+        const copyBtn = document.getElementById('copyCodeBtn');
+        const originalHTML = copyBtn.innerHTML;
+        
+        copyBtn.innerHTML = '<i class="fas fa-check"></i> BERHASIL DISALIN!';
+        copyBtn.classList.add('copied');
+        
+        showNotification('Kode pairing berhasil disalin ke clipboard!', 'success');
+        
+        setTimeout(() => {
+            copyBtn.innerHTML = originalHTML;
+            copyBtn.classList.remove('copied');
+        }, 2000);
+    }
+
+    // Function untuk update status sender di list  
+    function updateSenderStatus(number, status) {  
+        const sendersList = document.getElementById('sendersList');  
+        const senderItem = sendersList.querySelector(`[data-number="${number}"]`);  
+          
+        const statusMap = {  
+            'connected': 'connected',  
+            'connecting': 'connecting',  
+            'waiting_pairing': 'waiting_pairing',  
+            'waiting_qr': 'connecting',  
+            'requesting_code': 'connecting',  
+            'reconnecting': 'connecting',  
+            'disconnected': 'disconnected',  
+            'error': 'error',  
+            'failed': 'error',  
+            'timeout': 'error',  
+            'logged_out': 'disconnected'  
+        };  
+        const statusClass = statusMap[status] || 'disconnected';  
+
+        if (senderItem) {  
+            const statusEl = senderItem.querySelector('.sender-status');  
+            if (statusEl) {  
+                statusEl.className = 'sender-status ' + statusClass;  
+            }  
+        } else {  
+            loadUserSenders();  
+        }  
+    }  
+
+    // Load user senders  
+    async function loadUserSenders() {  
+        const sendersList = document.getElementById('sendersList');  
+          
+        sendersList.innerHTML = '<div class="loading-text"><i class="fas fa-spinner fa-spin"></i> Loading sender...</div>';  
+          
+        try {  
+            const response = await fetch('/api/my-senders');  
+            const data = await response.json();  
+              
+            if (!data.success || !data.senders || data.senders.length === 0) {  
+                sendersList.innerHTML = '<div class="no-senders"><i class="fas fa-exclamation-circle"></i> Belum ada sender. Tambahkan sender pertama Anda!</div>';  
+                return;  
+            }  
+              
+            let html = '';  
+            data.senders.forEach(sender => {  
+                const statusClass = 'connected';  
+                html += `  
+                    <div class="sender-item" data-number="${sender}">  
+                        <div class="sender-info">  
+                            <div class="sender-status ${statusClass}"></div>  
+                            <span class="sender-number">+${sender}</span>  
+                        </div>  
+                        <button class="btn-trash" onclick="openDeleteModal('${sender}')">  
+                            <i class="fas fa-trash"></i>  
+                        </button>  
+                    </div>  
+                `;  
+            });  
+              
+            sendersList.innerHTML = html;  
+        } catch (error) {  
+            console.error('Error loading senders:', error);  
+            sendersList.innerHTML = '<div class="no-senders"><i class="fas fa-exclamation-circle"></i> Gagal memuat sender.</div>';  
+        }  
+    }  
+
+    // Add sender function  
+    async function addSender() {  
+        const countryCode = document.getElementById('selectedCountryCode').value;  
+        let number = document.getElementById('newSenderNumber').value.trim();  
+          
+        if (!countryCode) {  
+            showNotification('Pilih kode negara terlebih dahulu!', 'error');  
+            return;  
+        }  
+          
+        if (!number) {  
+            showNotification('Masukkan nomor terlebih dahulu!', 'error');  
+            return;  
+        }  
+          
+        number = number.replace(/\D/g, '');  
+          
+        if (number.length < 6) {  
+            showNotification('Nomor terlalu pendek!', 'error');  
+            return;  
+        }  
+          
+        const fullNumber = countryCode + number;  
+          
+        const addBtn = document.getElementById('addSenderBtn');  
+        const originalText = addBtn.innerHTML;  
+          
+        addBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PROCESSING...';  
+        addBtn.disabled = true;  
+          
+        try {  
+            const response = await fetch('/api/add-sender', {  
+                method: 'POST',  
+                headers: {  
+                    'Content-Type': 'application/json',  
+                },  
+                body: JSON.stringify({ number: fullNumber })  
+            });  
+              
+            const data = await response.json();  
+              
+            if (data.success) {  
+                showNotification(data.message || '✓ Proses koneksi dimulai!', 'success');  
+                document.getElementById('newSenderNumber').value = '';  
+                  
+                const sendersList = document.getElementById('sendersList');  
+                const newItem = `  
+                    <div class="sender-item" data-number="${fullNumber}">  
+                        <div class="sender-info">  
+                            <div class="sender-status connecting"></div>  
+                            <span class="sender-number">+${fullNumber}</span>  
+                        </div>  
+                        <button class="btn-trash" onclick="openDeleteModal('${fullNumber}')">  
+                            <i class="fas fa-trash"></i>  
+                        </button>  
+                    </div>  
+                `;  
+                  
+                if (sendersList.querySelector('.no-senders')) {  
+                    sendersList.innerHTML = newItem;  
+                } else {  
+                    sendersList.insertAdjacentHTML('afterbegin', newItem);  
+                }  
+            } else {  
+                showNotification(data.error || 'Gagal menambahkan sender', 'error');  
+            }  
+        } catch (error) {  
+            console.error('Error:', error);  
+            showNotification('Terjadi kesalahan pada server', 'error');  
+        } finally {  
+            addBtn.innerHTML = originalText;  
+            addBtn.disabled = false;  
+        }  
+    }  
+
+    // Open delete modal  
+    function openDeleteModal(number) {  
+        numberToDelete = number;  
+        const deleteMessage = document.getElementById('deleteMessage');  
+        deleteMessage.innerHTML = `Apakah Anda yakin ingin menghapus sender <b style="color:#fff;">+${number}</b>? Ini akan memutuskan koneksi WhatsApp.`;  
+          
+        const modal = document.getElementById('deleteModal');  
+        modal.classList.add('active');  
+    }  
+
+    // Close delete modal  
+    function closeDeleteModal() {  
+        const modal = document.getElementById('deleteModal');  
+        modal.classList.remove('active');  
+        numberToDelete = null;  
+    }  
+
+    // Delete sender function  
+    async function deleteSender() {  
+        if (!numberToDelete) return;  
+          
+        const deleteBtn = document.getElementById('btnConfirmDelete');  
+        const originalText = deleteBtn.innerHTML;  
+          
+        deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> DELETING...';  
+        deleteBtn.disabled = true;  
+          
+        try {  
+            const response = await fetch('/api/delete-sender', {  
+                method: 'POST',  
+                headers: {  
+                    'Content-Type': 'application/json',  
+                },  
+                body: JSON.stringify({ number: numberToDelete })  
+            });  
+              
+            const data = await response.json();  
+              
+            if (data.success) {  
+                showNotification(data.message || '✓ Sender berhasil dihapus!', 'success');  
+                  
+                const senderItem = document.querySelector(`.sender-item[data-number="${numberToDelete}"]`);  
+                if (senderItem) {  
+                    senderItem.remove();  
+                }  
+                  
+                const sendersList = document.getElementById('sendersList');  
+                if (sendersList.children.length === 0) {  
+                    sendersList.innerHTML = '<div class="no-senders"><i class="fas fa-exclamation-circle"></i> Belum ada sender. Tambahkan sender pertama Anda!</div>';  
+                }  
+            } else {  
+                showNotification(data.error || 'Gagal menghapus sender', 'error');  
+            }  
+        } catch (error) {  
+            console.error('Error:', error);  
+            showNotification('Terjadi kesalahan pada server', 'error');  
+        } finally {  
+            deleteBtn.innerHTML = originalText;  
+            deleteBtn.disabled = false;  
+            closeDeleteModal();  
+        }  
+    }  
+
+    // Initialize when page loads  
+    document.addEventListener('DOMContentLoaded', function() {  
+        initParticles();  
+        initCountryDropdown();  
+        initEventStream();  
+        loadUserSenders();  
+          
+        document.getElementById('addSenderBtn').addEventListener('click', addSender);  
+        document.getElementById('newSenderNumber').addEventListener('keypress', function(e) {  
+            if (e.key === 'Enter') {  
+                addSender();  
+            }  
+        });  
+          
+        document.getElementById('copyCodeBtn').addEventListener('click', copyPairingCode);  
+        document.getElementById('closeModalBtn').addEventListener('click', closePairingModal);  
+        document.getElementById('btnConfirmDelete').addEventListener('click', deleteSender);  
+          
+        document.querySelectorAll('.modal-overlay').forEach(modal => {  
+            modal.addEventListener('click', function(e) {  
+                if (e.target === this) {  
+                    if (modal.id === 'pairingModal') {  
+                        closePairingModal();  
+                    } else if (modal.id === 'deleteModal') {  
+                        closeDeleteModal();  
+                    } else if (modal.id === 'guideModal') {  
+                        closeGuideModal();  
+                    }  
+                }  
+            });  
+        });  
+          
+        document.querySelector('.promo-banner').addEventListener('click', openGuideModal);  
+    });  
+</script>
+</body>
+</html>
