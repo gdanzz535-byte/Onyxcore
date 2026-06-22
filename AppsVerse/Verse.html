@@ -84,12 +84,12 @@
 
         /* 🎨 Variabel Warna dan Pengaturan Dasar */
         :root {
-            --primary-purple: #9933cc; /* 🌟 Ungu (Pengganti Biru Langit) */
-            --primary-purple-dark: #660099; /* 🌟 Varian lebih gelap */
+            --primary-purple: #9933cc;
+            --primary-purple-dark: #660099;
             --text-color: #f0f0f0; 
             --dark-bg: #0d0d0d;
             --input-bg: #222222;
-            --box-shadow-purple: 0 0 10px var(--primary-purple), 0 0 20px rgba(153, 51, 204, 0.5); /* 🌟 Box Shadow Ungu */
+            --box-shadow-purple: 0 0 10px var(--primary-purple), 0 0 20px rgba(153, 51, 204, 0.5);
             --header-bg: #1a1a1a;
             --card-bg: #1e1e1e;
             --coin-yellow: #ffc72a;
@@ -100,7 +100,8 @@
             --tool-brown: #cc6633;
             --tool-cyan: #33cccc;
             --tool-yellow: #ffcc00;
-            --info-blue: #007bff; /* Warna untuk Info Akun */
+            --info-blue: #007bff;
+            --gacor-gold: #ffd700;
         }
 
         /* Reset dan Dasar */
@@ -119,7 +120,6 @@
             color: var(--text-color);
         }
         
-        /* Container Utama */
         .main-container {
             width: 100%;
             max-width: 500px;
@@ -129,7 +129,6 @@
             overflow-x: hidden;
         }
 
-        /* Tampilan Header (Teks dan Ikon) */
         .app-header {
             width: 100%;
             padding: 15px 20px;
@@ -151,11 +150,10 @@
             cursor: pointer;
         }
         .profile-icon {
-            color: var(--primary-purple); /* 🌟 Ungu */
-            text-shadow: 0 0 5px var(--primary-purple); /* 🌟 Ungu */
+            color: var(--primary-purple);
+            text-shadow: 0 0 5px var(--primary-purple);
         }
 
-        /* Konten Halaman */
         .content-area {
             padding: 0 20px 70px 20px;
             display: none;
@@ -164,7 +162,6 @@
             display: block;
         }
         
-        /* --- Komponen Umum --- */
         .section-title {
             font-size: 1.2rem;
             font-weight: 700;
@@ -176,7 +173,6 @@
             margin-right: 10px;
         }
         
-        /* --- PROFIL/HOME VIEW STYLE --- */
         .custom-image-area {
             width: 100%;
             height: 150px;
@@ -196,7 +192,6 @@
             margin: 30px 0;
         }
         
-        /* --- GAMBAR LOGO PERMANEN DITANAMKAN DI SINI (CUSTOM IMAGE) --- */
         .logo-circle {
             width: 100px; 
             height: 100px; 
@@ -211,29 +206,19 @@
             background-size: cover;
             background-position: center;
             cursor: default; 
-
-            /* 🌟 TAMBAHAN BORDER (GARIS TEPI) - Ungu */
             border: 3px solid var(--primary-purple); 
-            
-            /* 🌟 TAMBAHAN BOX SHADOW (BAYANGAN GLOWING) - Ungu */
             box-shadow: 0 0 15px 2px rgba(153, 51, 204, 0.7); 
-            
-            /* 🚀 FOTO LOGO ANDA DIPASANG DI BARIS BAWAH INI */
             background-image: url('https://b.top4top.io/p_382458vzn0.png'); 
         }
 
-        
-        /* 💥 Sembunyikan Teks Default di dalam Logo */
         .logo-content {
             display: none; 
         }
 
-        /* Hapus efek silang merah (agar tidak mengganggu gambar custom) */
         .logo-circle::after {
              content: none; 
         }
 
-        /* Perbaikan: Ukuran Teks ID/Nama di Bug Sender (WhatsApp View) dibuat lebih kecil */
         #homeView .id-number {
             font-size: 1.5rem; 
             font-weight: 800;
@@ -249,14 +234,13 @@
             letter-spacing: 1px;
         }
         .role-info .highlight {
-            color: var(--primary-purple); /* 🌟 Ungu */
+            color: var(--primary-purple);
             font-weight: 600;
         }
 
-        /* Input Form */
-        .input-title { font-size: 0.9rem; color: var(--primary-purple); /* 🌟 Ungu */ font-weight: 500; margin-bottom: 15px; text-transform: uppercase; }
+        .input-title { font-size: 0.9rem; color: var(--primary-purple); font-weight: 500; margin-bottom: 15px; text-transform: uppercase; }
         .input-group { position: relative; margin-bottom: 25px; }
-        .input-group .icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary-purple); /* 🌟 Ungu */ font-size: 1.2rem; }
+        .input-group .icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary-purple); font-size: 1.2rem; }
         .bug-input, .bug-select {
             width: 100%; padding: 15px 15px 15px 50px; border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px; background-color: var(--input-bg); color: var(--text-color);
@@ -267,15 +251,13 @@
         .select-group { position: relative; }
         .select-group .arrow-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #888; pointer-events: none; }
         .submit-button, .redeem-button {
-            width: 100%; padding: 18px; margin-top: 30px; background-color: var(--primary-purple); /* 🌟 Ungu */ border: none;
+            width: 100%; padding: 18px; margin-top: 30px; background-color: var(--primary-purple); border: none;
             border-radius: 12px; font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 700;
-            color: white; cursor: pointer; box-shadow: var(--box-shadow-purple); /* 🌟 Ungu Shadow */ display: flex;
+            color: white; cursor: pointer; box-shadow: var(--box-shadow-purple); display: flex;
             justify-content: center; align-items: center; gap: 10px; text-transform: uppercase;
         }
 
         /* --- WALLET VIEW STYLE (INFO AKUN) --- */
-        
-        /* NEW: Account Info Card (Sesuai KINONG) */
         .account-card-group {
             display: flex;
             flex-direction: column;
@@ -296,7 +278,7 @@
             display: flex;
             align-items: center;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(153, 51, 204, 0.2); /* Border Ungu */
+            border: 1px solid rgba(153, 51, 204, 0.2);
         }
         .account-info-card i {
             font-size: 1.3rem;
@@ -319,35 +301,24 @@
         .account-info-card .value.role {
             color: var(--tool-green);
         }
-        /* Style khusus untuk expired */
         .account-info-card .value.expired {
             color: var(--tool-red);
         }
-        /* Style untuk Expired Time Sender */
         .account-info-card .value.expiry-time {
             font-size: 0.85rem;
             font-weight: 500;
             color: var(--coin-yellow);
         }
 
-
-        /* NEW: Banner dan Feature Release Card (Sesuai KINONG) */
         .kinong-banner {
             width: 100%;
             height: 150px;
-            background-image: url('https://b.top4top.io/p_382458vzn0.png'); /* GANTI DENGAN GAMBAR BANNER KINONG */
+            background-image: url('https://b.top4top.io/p_382458vzn0.png');
             background-size: cover;
             background-position: center;
             border-radius: 15px;
             margin-bottom: 20px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 2rem;
-            font-weight: 800;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
         }
 
         .feature-release-card {
@@ -359,20 +330,13 @@
             border: 1px solid rgba(153, 51, 204, 0.1);
         }
         
-        /* NEW: Glass Purple Channel Card Style */
         .glass-blue-channel {
-            /* Background Glass Ungu Transparan */
-            background: rgba(153, 51, 204, 0.1); /* Ungu Transparan */
+            background: rgba(153, 51, 204, 0.1);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            
-            /* Border Ungu Terang */
             border: 1px solid rgba(153, 51, 204, 0.4); 
-            
-            /* Box Shadow Glowing Ungu */
             box-shadow: 0 4px 20px rgba(153, 51, 204, 0.3), 
-                        inset 0 0 10px rgba(255, 255, 255, 0.1); /* Inset Glow Putih */
-            
+                        inset 0 0 10px rgba(255, 255, 255, 0.1);
             transition: transform 0.2s;
         }
 
@@ -381,10 +345,9 @@
         }
 
         .glass-blue-channel .title {
-            color: var(--primary-purple) !important; /* Memastikan warna Ungu */
+            color: var(--primary-purple) !important;
             text-shadow: 0 0 5px rgba(153, 51, 204, 0.7);
         }
-        /* END: Glass Purple Channel Card Style */
         
         .feature-release-card .title {
             font-size: 0.9rem;
@@ -402,24 +365,23 @@
 
         /* --- TOOLS VIEW STYLE --- */
         .tools-title-header { text-align: center; margin: 20px 0 40px 0; color: var(--text-color); }
-        .tools-title-header h2 { font-size: 1.8rem; font-weight: 700; color: var(--text-color); text-shadow: 0 0 5px var(--primary-purple); /* 🌟 Ungu */ margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .tools-title-header h2 i { color: var(--primary-purple); /* 🌟 Ungu */ }
+        .tools-title-header h2 { font-size: 1.8rem; font-weight: 700; color: var(--text-color); text-shadow: 0 0 5px var(--primary-purple); margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .tools-title-header h2 i { color: var(--primary-purple); }
         .tools-title-header p { font-size: 0.7rem; color: #aaa; font-weight: 400; }
         .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding-bottom: 20px; }
         .tool-block { background-color: var(--card-bg); border-radius: 15px; padding: 20px; text-align: left; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; display: flex; flex-direction: column; gap: 5px; box-shadow: 0 0 5px rgba(255, 255, 255, 0.1); }
         .tool-icon-circle { width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; font-size: 1.2rem; }
         .ddos .tool-icon-circle { background-color: rgba(255, 51, 102, 0.2); color: var(--tool-red); }
         
-        /* NEW: Tools Block Tunggal DDoS (Glass Ungu) */
         #toolsView .tools-grid {
-            display: flex; /* Ganti grid menjadi flex untuk blok tunggal */
+            display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
         }
         .single-tool-block {
             width: 100%;
-            background: rgba(153, 51, 204, 0.1); /* Ungu Transparan */
+            background: rgba(153, 51, 204, 0.1);
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
             border-radius: 20px;
@@ -450,13 +412,11 @@
             color: #ccc;
         }
         
-        /* --- Footer Navigasi (DILEWATI) --- */
         .bottom-navbar { position: fixed; bottom: 0; width: 100%; max-width: 500px; margin: 0 auto; background-color: var(--header-bg); border-top: 1px solid rgba(255, 255, 255, 0.1); padding: 10px 0; display: flex; justify-content: space-around; z-index: 100; }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: #888; font-size: 0.7rem; text-decoration: none; cursor: pointer; transition: color 0.3s ease; }
         .nav-item i { font-size: 1.4rem; }
-        .nav-item.active { color: var(--primary-purple); /* 🌟 Ungu */ }
+        .nav-item.active { color: var(--primary-purple); }
         
-        /* --- Modal Umum --- */
         .custom-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.8); display: flex;
@@ -473,7 +433,6 @@
             flex-direction: column; align-items: center;
         }
 
-        /* Styling for History Modal Items */
         .history-item {
             display: flex;
             justify-content: space-between;
@@ -483,7 +442,6 @@
             font-size: 0.85rem;
         }
         
-        /* 💥 Gaya Khusus Info Akun Modal */
         #accountInfoModal .custom-modal-content {
             text-align: left; 
             padding: 20px 30px; 
@@ -501,7 +459,7 @@
             font-size: 0.9rem; color: #ccc;
         }
         #accountInfoModal .info-icon {
-            color: var(--primary-purple); /* 🌟 Ungu */ 
+            color: var(--primary-purple);
             font-size: 1.2rem; width: 30px; text-align: center; 
         }
         #accountInfoModal .info-label {
@@ -514,15 +472,14 @@
             color: var(--tool-green);
         }
         
-        /* PERBAIKAN: Modal Buttons (Tombol di Tengah) */
         .modal-buttons {
             display: flex;
-            justify-content: center; /* 🌟 Tombol di Tengah secara default */
+            justify-content: center;
             gap: 15px;
             margin-top: 20px;
             width: 100%;
         }
-        .modal-buttons.double { /* Class untuk dua tombol (misalnya Konfirmasi) */
+        .modal-buttons.double {
             justify-content: space-between;
         }
         .modal-btn {
@@ -533,13 +490,13 @@
             font-weight: 600;
             cursor: pointer;
             border: none;
-            width: auto; /* 🌟 Otomatis, tidak lagi 50% */
+            width: auto;
             min-width: 100px;
             max-width: 150px;
             transition: background-color 0.2s;
         }
         .modal-buttons.double .modal-btn {
-            width: 50%; /* Paksa 50% untuk mode dua tombol */
+            width: 50%;
             max-width: none;
         }
         .modal-btn.primary {
@@ -555,8 +512,6 @@
             background-color: var(--primary-purple-dark);
         }
 
-
-        /* --- NEW: Style untuk Bug Selection Modal List --- */
         #bugSelectionModal .custom-modal-content {
             max-width: 350px;
         }
@@ -585,12 +540,10 @@
 
         .modal-bug-item i {
             margin-right: 15px; width: 20px; text-align: center;
-            color: var(--primary-purple); /* Icon Bug Warna Ungu */
+            color: var(--primary-purple);
             font-size: 1.1rem; 
         }
-        /* --- Akhir Styling Modal List --- */
         
-        /* --- Styling Bottom Sheet (untuk DDoS) --- */
         .bottom-sheet-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.7); z-index: 2500; 
@@ -629,7 +582,7 @@
         }
 
         .bottom-sheet-header .close-sheet-btn:hover {
-            color: var(--primary-purple); /* 🌟 Ungu */
+            color: var(--primary-purple);
         }
 
         .bottom-sheet-content {
@@ -651,13 +604,10 @@
 
         .bottom-sheet-item i {
             margin-right: 15px; width: 20px; text-align: center;
-            color: var(--primary-purple); /* Icon Bug Warna Ungu */
+            color: var(--primary-purple);
             font-size: 1.1rem; 
         }
-        /* --- Akhir Styling Bottom Sheet --- */
 
-
-        /* --- NEW: Drawer Menu Styles --- */
         .drawer-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.7); z-index: 1500;
@@ -665,7 +615,7 @@
         }
 
         .drawer-menu {
-            position: fixed; top: 0; left: 0; width: 75%; /* Lebar drawer */
+            position: fixed; top: 0; left: 0; width: 75%;
             max-width: 300px; height: 100%; background-color: var(--header-bg);
             z-index: 2000; transform: translateX(-100%);
             transition: transform 0.3s ease; box-shadow: 5px 0 15px rgba(0, 0, 0, 0.5);
@@ -681,13 +631,12 @@
         }
 
         .drawer-header {
-            padding: 20px; background-color: var(--primary-purple); /* 🌟 Ungu */
+            padding: 20px; background-color: var(--primary-purple);
             color: white; display: flex; justify-content: space-between;
             align-items: center; font-size: 1.2rem; font-weight: 700;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
         
-        /* Perbaikan: Tambahkan style untuk info developer dan separator */
         .drawer-dev-info {
             display: flex;
             align-items: center;
@@ -714,7 +663,6 @@
             display: flex; flex-direction: column;
         }
         
-        /* Perbaikan: Style drawer item */
         .drawer-item {
             display: flex;
             align-items: center;
@@ -729,30 +677,25 @@
             margin-right: 15px;
             width: 20px;
             text-align: center;
-            color: #888; /* Icon default grey */
+            color: #888;
             font-size: 1.2rem;
         }
 
         .drawer-item:hover, .drawer-item.active {
-            background-color: rgba(153, 51, 204, 0.1); /* 🌟 Ungu Transparan */
-            color: var(--primary-purple); /* 🌟 Ungu */
+            background-color: rgba(153, 51, 204, 0.1);
+            color: var(--primary-purple);
         }
         .drawer-item.active i {
-            color: var(--primary-purple); /* 🌟 Ungu */
+            color: var(--primary-purple);
         }
         .logout-item {
             margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.1);
             color: var(--tool-red); 
         }
-        /* --- END: Drawer Menu Styles --- */
 
-        /* --- NEW: Perubahan Style untuk Profil WhatsApp (agar mirip screenshot AlvaroZz) --- */
-        /* 1. Profile Background (The red/blue abstract image) */
         .profile-background {
             width: 100%;
-            /* PERBAIKAN: Diperpanjang ukurannya (dari 180px menjadi 200px) */
             height: 100px; 
-            /* Placeholder: Gunakan gambar yang Anda berikan */
             background-size: cover;
             background-position: center;
             position: relative;
@@ -760,36 +703,28 @@
             margin-bottom: 20px;
         }
         
-        /* 2. Overriding Logo/Profile Circle for AlvaroZz style */
         #homeView .logo-circle {
             width: 120px; 
             height: 120px;
-            /* Disesuaikan karena background dipanjangkan (dari -60px menjadi -70px) */
             margin-top: -70px; 
             border: 3px solid var(--primary-purple); 
             box-shadow: 0 0 15px 2px rgba(153, 51, 204, 0.7); 
-            
-            /* Overriding the default logo image with AlvaroZz's logo from screenshot */
-            /* Placeholder: Gunakan gambar yang Anda berikan */
             background-image: url('https://i.ibb.co/ySgYJ3n/alvaro-logo.jpg'); 
         }
 
-        /* 3. Penyesuaian Bagian Profil */
         #homeView .profile-section {
             margin: 5px 0 30px 0; 
         }
 
-        /* 4. Style Nama (Lebih kecil dan ada glow ungu) */
         #homeView .id-number {
-            font-size: 1.5rem; /* Lebih kecil dari 1.8rem */
+            font-size: 1.5rem;
             font-weight: 800;
             margin-top: 15px; 
             margin-bottom: 10px; 
-            color: white; /* Pastikan warna dasar putih */
-            text-shadow: 0 0 5px var(--primary-purple); /* GLOW UNGU */
+            color: white;
+            text-shadow: 0 0 5px var(--primary-purple);
         }
 
-        /* 5. NEW: Style untuk Tombol/Tag Role & Exp */
         .role-exp-container {
             display: flex;
             gap: 15px; 
@@ -811,30 +746,26 @@
         }
 
         .role-tag {
-            /* 🌟 Diubah menjadi Ungu */
             background: var(--primary-purple); 
             color: white;
             box-shadow: 0 0 8px rgba(153, 51, 204, 0.5);
         }
 
         .exp-tag {
-            /* Darker grey tag for Exp */
             background: #2c2c2c; 
             color: #eee;
             border: 1px solid #444;
         }
 
-        /* 6. Form Card Wrapper (The container around the form) */
         .form-section {
             padding: 20px; 
-            background-color: var(--card-bg); /* Use existing card background for the form box */
+            background-color: var(--card-bg);
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             margin-top: 20px;
             margin-bottom: 20px;
         }
 
-        /* 7. Input Title/Icon Style */
         #homeView .form-section .input-title { 
             font-size: 1.0rem; 
             color: #fff; 
@@ -845,24 +776,21 @@
             align-items: center;
         }
         #homeView .form-section .input-title i {
-            color: var(--primary-purple); /* 🌟 Ungu */
+            color: var(--primary-purple);
             margin-right: 8px;
             font-size: 1.2rem;
         }
 
-        /* 8. Input Field Style Adjustments */
         #homeView .form-section .bug-input, 
         #homeView .form-section .bug-select {
             border: 1px solid #555;
-            background-color: #111; /* Darker background */
-            padding-left: 15px; /* Remove default padding for icon */
+            background-color: #111;
+            padding-left: 15px;
         }
-        /* Hide the floating icon inside the input field */
         #homeView .form-section .input-group .icon {
             display: none; 
         }
 
-        /* 9. Static Select Field (for BUG) - Diubah menjadi klik untuk buka modal */
         .static-select-wrapper {
             position: relative;
             margin-bottom: 25px;
@@ -878,7 +806,7 @@
             font-family: 'Orbitron', sans-serif; 
             font-size: 0.9rem; 
             box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
-            cursor: pointer; /* Bisa diklik */
+            cursor: pointer;
             text-align: left;
             display: flex;
             justify-content: space-between;
@@ -889,29 +817,24 @@
             color: #888; 
         }
 
-        /* 10. Submit Button Style (Ungu Gradien) */
         #homeView .submit-button {
-            /* 🌟 Diubah menjadi Gradien Ungu */
             background: linear-gradient(to right, var(--primary-purple), var(--primary-purple-dark)); 
             box-shadow: 0 0 15px rgba(153, 51, 204, 0.7);
             margin-top: 20px;
         }
-        /* --- END OF NEW STYLES FOR ALVAROZZ VIEW --- */
 
-        /* NEW: Style untuk Banner Profil Kustom (Diperkecil menjadi rasio 16:5) */
         .profile-banner-custom {
             width: 100%;
-            /* 📐 PERUBAHAN: Menggunakan Rasio 16:5 (100% / 16 * 5 = 31.25%) untuk banner yang lebih ramping */
             padding-top: 31.25%; 
             height: 0; 
             background-color: #1a1a1a;
             border-radius: 15px;
-            margin-top: 20px; /* Jarak dari atas (Role/Exp) */
-            margin-bottom: 20px; /* Jarak ke bawah (Form) */
+            margin-top: 20px;
+            margin-bottom: 20px;
             overflow: hidden;
             position: relative;
-            box-shadow: 0 0 15px rgba(153, 51, 204, 0.5); /* Glow Ungu */
-            border: 1px solid rgba(153, 51, 204, 0.3); /* Border Ungu */
+            box-shadow: 0 0 15px rgba(153, 51, 204, 0.5);
+            border: 1px solid rgba(153, 51, 204, 0.3);
         }
 
         .profile-banner-custom .banner-content {
@@ -920,7 +843,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('https://c.top4top.io/p_3824p9z760.gif'); /* 🖼️ GANTI DENGAN GAMBAR BANNER ANDA */
+            background-image: url('https://c.top4top.io/p_3824p9z760.gif');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -933,6 +856,25 @@
             padding: 10px;
         }
 
+        /* GACOR BUG STYLES */
+        .bug-badge-gacor {
+            background: linear-gradient(135deg, #ffd700, #ff6b00);
+            color: #000;
+            font-weight: 900;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 0.6rem;
+            margin-left: 5px;
+        }
+        
+        .gacor-glow {
+            animation: gacorPulse 1s ease-in-out infinite alternate;
+        }
+        
+        @keyframes gacorPulse {
+            from { box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+            to { box-shadow: 0 0 30px rgba(255, 215, 0, 0.8); }
+        }
     </style>
 </head>
 <body>
@@ -990,7 +932,7 @@
         <div id="bugSelectionModal" class="custom-modal-overlay" onclick="closeModal('bugSelectionModal')">
             <div class="custom-modal-content" onclick="event.stopPropagation()">
                 <h3 class="modal-title" style="color: var(--primary-purple); margin-bottom: 20px;">
-                    <i class="fas fa-bug"></i> Pilih Jenis Bug
+                    <i class="fas fa-bug"></i> Pilih Jenis Bug <span class="bug-badge-gacor">GACOR!</span>
                 </h3>
                 <div id="bugOptionsContainerModal" style="width: 100%; max-height: 40vh; overflow-y: auto;">
                     </div>
@@ -1012,8 +954,8 @@
             </div>
             
             <div class="feature-release-card">
-                <div class="title"><i class="fas fa-bullhorn"></i> The New Version V1.0</div>
-                <div class="message"> The latest update of the Vaeltrix Application with a very cool theme Upadate to New.</div>
+                <div class="title"><i class="fas fa-bullhorn"></i> 🔥 New Gacor Update V2.0</div>
+                <div class="message"> Latest update with 5 new bug modes: <b>Force Close, Freeze, Delay UI, Newsletter Flood & GACOR ALL!</b></div>
             </div>
             
             <h2 class="account-info-title"><i class="fas fa-user-circle"></i> Account Information</h2>
@@ -1084,8 +1026,8 @@
             <div class="profile-section">
                 <div id="customLogoImageArea" class="logo-circle" 
                      style="
-                        background-image: url('https://k.top4top.io/p_3824x0n710.png'); /* Logo TRASFLOX BUG ONLY */
-                        margin-top: -70px; /* Disesuaikan untuk background yang lebih panjang */
+                        background-image: url('https://k.top4top.io/p_3824x0n710.png');
+                        margin-top: -70px;
                      ">
                     <div class="logo-content" id="logoText">NAILONG INFINITY</div>
                 </div>
@@ -1114,19 +1056,19 @@
                 </div>
                 
                 <div class="input-title">
-                    <i class="fas fa-bug"></i> Type Bug
+                    <i class="fas fa-bug"></i> Type Bug <span class="bug-badge-gacor">🔥 GACOR</span>
                 </div>
                 <div class="select-group input-group">
                     <div class="static-select-wrapper">
                         <div id="bugSelectButton" class="static-select" onclick="showBugSelectionModal()">
-                            <span id="selectedBugName">TR DELAYUI</span>
+                            <span id="selectedBugName">⚡ GACOR ALL</span>
                             <i class="fas fa-chevron-down"></i>
                         </div>
                     </div>
                 </div>
                 
-                <button class="submit-button" onclick="confirmAndSendBug()">
-                    <i class="fas fa-paper-plane"></i> SEND BUG
+                <button class="submit-button gacor-glow" onclick="confirmAndSendBug()">
+                    <i class="fas fa-skull-crossbones"></i> 🔥 EXECUTE GACOR
                 </button>
                 
             </div>
@@ -1217,7 +1159,6 @@ music.addEventListener('pause', () => {
         const confirmActionModal = document.getElementById('confirmActionModal');
         const accountInfoModal = document.getElementById('accountInfoModal'); 
         
-        // NEW Modal elements for Bug Selection (DIALOG)
         const bugSelectionModal = document.getElementById('bugSelectionModal');
         const bugOptionsContainerModal = document.getElementById('bugOptionsContainerModal');
 
@@ -1225,64 +1166,49 @@ music.addEventListener('pause', () => {
         const targetNumberInput = document.getElementById('targetNumber'); 
         const confirmMessageElement = document.getElementById('confirmMessage');
         
-        // Drawer elements
         const drawerMenu = document.getElementById('drawerMenu');
         const drawerOverlay = document.getElementById('drawerOverlay');
 
-        // NEW: Daftar Pilihan Bug
+        // 🔥 BUG OPTIONS GACOR!
         const BUG_OPTIONS = [
-            { name: "Crash iOS", icon: "fa-brands fa-apple" },
-            { name: "Delay Hard", icon: "fa-solid fa-hourglass-half" },
+            { name: "🔥 GACOR ALL", icon: "fa-solid fa-skull-crossbones" },
+            { name: "💀 Force Close", icon: "fa-solid fa-bomb" },
+            { name: "❄️ Freeze", icon: "fa-solid fa-snowflake" },
+            { name: "⏳ Delay UI", icon: "fa-solid fa-hourglass-end" },
+            { name: "📨 Newsletter Flood", icon: "fa-solid fa-newspaper" },
         ];
 
         // NEW: Variabel untuk Cooldown dan Bug Counter (Persisten)
-        const MAX_BUG_PER_COOLDOWN = 5;
-        const COOLDOWN_TIME_SECONDS = 5; // COOLDOWN 5 DETIK
+        const MAX_BUG_PER_COOLDOWN = 10;
+        const COOLDOWN_TIME_SECONDS = 3;
         
-        // NEW: Dual Counter Logic
-        let bugSendCount = 0; // Cumulative, non-resetting counter (for display)
-        let internalCooldownCount = 0; // Resets when cooldown is triggered (for 5x limit check)
+        let bugSendCount = 0;
+        let internalCooldownCount = 0;
         let cooldownEndTime = null; 
         
         let confirmCallback = null;
 
-        // ===========================================
-        // NEW: Variabel Global untuk Peran Pengguna & Expired Status
-        // ===========================================
-        let userRole = 'member'; // Default ke 'member' jika belum dimuat
-        let isAccountExpired = false; // NEW: Status expired
+        let userRole = 'member';
+        let isAccountExpired = false;
         
-        // ===========================================
-        // 🛠️ PERUBAHAN SENDER MANAGER LOGIC
-        // ===========================================
-        // 1. Ganti Array menjadi Object tunggal
-        // stores { number: '123', expiryTime: timestamp }
         let senderData = null; 
-        
-        // 2. Batas Maksimum Sender (MAX: 1)
         const MAX_SENDER_COUNT = 1; 
-        
-        // 3. Masa berlaku Sender (24 Jam)
         const SENDER_LIFETIME_MS = 24 * 60 * 60 * 1000; 
 
         const senderListContainer = document.getElementById('senderListContainer');
         const infoSenderCount = document.getElementById('infoSenderCount');
         
-        // Ganti saveSenderNumbers()
         function saveSenderNumbers() {
             localStorage.setItem('senderData', JSON.stringify(senderData));
             updateSenderDisplay();
         }
 
-        // Fungsi Helper untuk format waktu sisa
         function formatTimeRemaining(expiryTime) {
             const ms = expiryTime - Date.now();
             if (ms <= 0) return "Expired";
-            
             const hours = Math.floor(ms / (1000 * 60 * 60));
             const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((ms % (1000 * 60)) / 1000);
-            
             if (hours > 0) {
                 return `${hours}j ${minutes}m`;
             } else if (minutes > 0) {
@@ -1292,9 +1218,7 @@ music.addEventListener('pause', () => {
             }
         }
         
-        // Ganti updateSenderDisplay()
         function updateSenderDisplay() {
-            // Update total count
             if (infoSenderCount) {
                 infoSenderCount.textContent = senderData ? MAX_SENDER_COUNT : 0;
             }
@@ -1313,16 +1237,11 @@ music.addEventListener('pause', () => {
                     return;
                 }
 
-                // Cek status expired saat display
                 if (senderData.expiryTime <= Date.now()) {
-                    // Jika sudah expired saat display, anggap nomor sudah tidak terpakai
                     senderData = null;
-                    saveSenderNumbers(); // Clear from storage
-                    
-                    // Simpan nomor terakhir di cache untuk check "kenon"
-                    localStorage.setItem('lastExpiredSenderNumber', senderData.number); 
-                    
-                    updateSenderDisplay(); // Panggil ulang untuk menampilkan "Belum Ada Sender"
+                    saveSenderNumbers();
+                    localStorage.setItem('lastExpiredSenderNumber', senderData ? senderData.number : ''); 
+                    updateSenderDisplay();
                     return;
                 }
                 
@@ -1344,31 +1263,25 @@ music.addEventListener('pause', () => {
             }
         }
         
-        // Ganti removeSenderNumber()
         function removeSenderNumber(numberToRemove) {
              if (isAccountExpired) {
                  showAlert("Aksi dibatalkan. Akun Anda telah expired.", "AKUN EXPIRED", "error", "fas fa-lock");
                  return;
             }
-            showConfirm(`Apakah Anda yakin ingin menghapus Sender ${numberToRemove}? Penghapusan Sender akan memicu simulasi status "logout/kenon" jika nomor ini diinput kembali.`, (isConfirmed) => {
+            showConfirm(`Apakah Anda yakin ingin menghapus Sender ${numberToRemove}?`, (isConfirmed) => {
                 if (isConfirmed) {
                     if (senderData && senderData.number === numberToRemove) {
-                        // Simpan nomor terakhir yang dihapus untuk check "kenon"
                         localStorage.setItem('lastExpiredSenderNumber', numberToRemove); 
-                        
                         senderData = null;
-                        saveSenderNumbers(); // This now saves null
-                        
+                        saveSenderNumbers();
                         showAlert(`Nomor Sender ${numberToRemove} telah dihapus.`, "Sender Dihapus", "success", "fas fa-trash-alt");
                     } else {
-                         // Fallback jika diklik pada display yang salah, tapi seharusnya tidak terjadi
                          showAlert(`Nomor Sender ${numberToRemove} tidak ditemukan.`, "Error", "error", "fas fa-exclamation-triangle");
                     }
                 }
             });
         }
         
-        // Ganti addSenderNumber()
         function addSenderNumber() {
             if (isAccountExpired) {
                  showAlert("Aksi dibatalkan. Akun Anda telah expired.", "AKUN EXPIRED", "error", "fas fa-lock");
@@ -1388,14 +1301,10 @@ music.addEventListener('pause', () => {
                 showAlert("Tolong gunakan nomor yang valid (hanya angka) untuk Sender.", "Input Error", "error", "fas fa-exclamation-triangle");
                 return;
             }
-            
-            // 🔍 ANALISIS NOMOR SENDER BARU
 
-            // 1. Cek: Batas maksimum Sender (Max 1)
-            // Cek apakah ada sender aktif. Jika ada, tolak.
             if (senderData && senderData.expiryTime > Date.now()) {
                 showAlert(
-                    `Gagal: Anda sudah memiliki Sender aktif (${senderData.number}). Batas maksimal adalah 1. Harap hapus Sender yang ada terlebih dahulu.`, 
+                    `Gagal: Anda sudah memiliki Sender aktif (${senderData.number}). Batas maksimal adalah 1.`, 
                     "Batas Tercapai", 
                     "error", 
                     "fas fa-ban"
@@ -1403,14 +1312,10 @@ music.addEventListener('pause', () => {
                 return;
             }
             
-            // 2. Cek: Simulasi "Nomor Logout atau Kenon"
-            // Cek apakah nomor yang diinput sama dengan nomor terakhir yang dihapus/expired.
             const lastExpiredSenderNumber = localStorage.getItem('lastExpiredSenderNumber');
 
             if (newNumber === lastExpiredSenderNumber) {
-                // Hapus penanda "kenon" agar user bisa mencoba nomor yang berbeda
                 localStorage.removeItem('lastExpiredSenderNumber'); 
-                
                 showAlert(
                     "Gagal: Nomor ini sudah logout atau kenon. Silakan gunakan nomor lain.", 
                     "Analisis: Nomor Bermasalah", 
@@ -1420,7 +1325,6 @@ music.addEventListener('pause', () => {
                 return; 
             }
             
-            // 3. Status Diterima (KOSONG / AVAILABLE) - Terapkan masa berlaku 24 jam
             const expiryTime = Date.now() + SENDER_LIFETIME_MS;
             
             senderData = {
@@ -1429,7 +1333,6 @@ music.addEventListener('pause', () => {
             };
             
             saveSenderNumbers(); 
-            
             input.value = '';
             
             showAlert(
@@ -1439,32 +1342,14 @@ music.addEventListener('pause', () => {
                 "fas fa-check-circle"
             );
             
-            // Hapus penanda "kenon" jika berhasil menambahkan nomor baru
             localStorage.removeItem('lastExpiredSenderNumber');
         }
 
-        // ===========================================
-        // END: PERUBAHAN SENDER MANAGER LOGIC
-        // ===========================================
-        
-        
-        // **********************************
-        // NEW: LOGIC CEK EXPIRATION AKUN
-        // **********************************
-        /**
-         * Memeriksa apakah tanggal hari ini sudah melewati tanggal expired.
-         * @returns {boolean} True jika sudah expired, False jika belum.
-         */
         function checkExpiration() {
             const expiredDateStr = document.getElementById('infoExpired').textContent.trim();
-            // Konversi string YYYY-MM-DD menjadi objek Date
             const expiredDate = new Date(expiredDateStr);
-            // Atur waktu expired tepat pada akhir hari tanggal tersebut (23:59:59)
             expiredDate.setHours(23, 59, 59, 999); 
-            
             const currentDate = new Date();
-            
-            // Jika tanggal saat ini lebih besar dari tanggal expired, maka expired.
             if (currentDate.getTime() > expiredDate.getTime()) {
                 isAccountExpired = true;
                 return true;
@@ -1473,22 +1358,14 @@ music.addEventListener('pause', () => {
             return false;
         }
 
-        /**
-         * Mengunci seluruh akses aplikasi dan menampilkan pesan expired.
-         */
         function lockApp() {
-            // Sembunyikan semua konten utama
             document.querySelector('.main-container').style.display = 'none';
             document.querySelector('.bottom-navbar').style.display = 'none';
-            
-            // Ganti isi header untuk menunjukkan status
             const appHeader = document.querySelector('.app-header');
             if (appHeader) {
                 appHeader.style.justifyContent = 'center';
                 appHeader.innerHTML = `<span class="header-title" style="color: var(--tool-red);">Vaeltrix Apps - KUNCI</span>`;
             }
-            
-            // Tampilkan alert expired yang tidak bisa ditutup
             const modalContent = customAlertDialog.querySelector('.custom-modal-content');
             modalContent.innerHTML = `
                 <i class="fas fa-exclamation-circle modal-icon error" style="color: var(--tool-red); font-size: 3rem; margin-bottom: 15px;"></i>
@@ -1502,26 +1379,21 @@ music.addEventListener('pause', () => {
                 </div>
             `;
             customAlertDialog.style.display = 'flex';
-            
-            // Mencegah penutupan modal dengan mengklik di luar
             customAlertDialog.onclick = function(event) { event.stopPropagation(); };
         }
-        // **********************************
         
-        
-        // **********************************
-        // LOGIC VALIDASI AKSES TOOLS
-        // **********************************
         function checkToolAccess(role) {
             const allowedRoles = ['owner', 'resseler', 'admin'];
             return allowedRoles.includes(role.toLowerCase());
         }
         
-        // --- Fungsi Dasar UI ---
-        
         function changeView(clickedItem) {
+            // 🔥 Refresh role dari HTML
+            const roleElement = document.getElementById('infoRole');
+            if (roleElement) {
+                userRole = roleElement.textContent.toLowerCase().trim();
+            }
             
-            // NEW: Pengecekan Expired di awal setiap pergantian view
             if (isAccountExpired) {
                  showAlert("Aplikasi tidak dapat diakses karena akun sudah expired.", "AKUN EXPIRED", "error", "fas fa-lock");
                  return;
@@ -1529,11 +1401,10 @@ music.addEventListener('pause', () => {
             
             const targetViewId = clickedItem.getAttribute('data-view');
 
-            // VALIDASI AKSES TOOLS
             if (targetViewId === 'toolsView') {
                 if (!checkToolAccess(userRole)) {
                     showAlert(
-                        "Menu ini hanya bisa diakses Oleh OWNER/RESSELER",
+                        "Menu ini hanya bisa diakses Oleh ADMIN/OWNER/RESSELER",
                         "Akses Ditolak", 
                         "error", 
                         "fas fa-ban"
@@ -1562,10 +1433,7 @@ music.addEventListener('pause', () => {
         function closeModal(modalId) {
             const modalElement = document.getElementById(modalId);
             if (!modalElement) return;
-            
-            // Pastikan tidak menutup modal expired
             if (isAccountExpired) return;
-
             modalElement.style.display = 'none';
         }
         
@@ -1582,15 +1450,13 @@ music.addEventListener('pause', () => {
         }
 
         function closeDrawer() {
-            if (isAccountExpired) return; // Jangan tutup jika expired
+            if (isAccountExpired) return;
             drawerOverlay.classList.remove('active');
             drawerMenu.classList.remove('open');
             setTimeout(() => {
                 drawerOverlay.style.display = 'none';
             }, 300);
         }
-
-        // --- Fungsi Modal Kustom (Alert & Confirm) ---
 
         function showAlert(message, title, type, iconClass) {
             const modalContent = customAlertDialog.querySelector('.custom-modal-content');
@@ -1626,9 +1492,6 @@ music.addEventListener('pause', () => {
             confirmCallback = null;
         }
 
-        // --- Fungsi Spesifik Aplikasi ---
-        
-        // NEW: Fungsi Logout
         function handleLogout() {
              if (isAccountExpired) {
                  showAlert("Aksi dibatalkan. Akun Anda telah expired.", "AKUN EXPIRED", "error", "fas fa-lock");
@@ -1636,26 +1499,18 @@ music.addEventListener('pause', () => {
             }
             showConfirm("Apakah Anda yakin ingin keluar dari aplikasi?", (isConfirmed) => {
                 if (isConfirmed) {
-                    // Bersihkan localStorage (semua counter)
-                    localStorage.clear(); // Bersihkan semua data
-                    
+                    localStorage.clear();
                     showAlert("Anda telah berhasil keluar. Sampai jumpa!", "Logout Sukses", "info", "fas fa-door-open");
-                    
-                    // Simulasi Logout (hanya menyembunyikan, tidak benar-benar logout)
                     document.querySelector('.main-container').style.display = 'none';
                     document.querySelector('.bottom-navbar').style.display = 'none';
                     document.querySelector('.app-header').style.display = 'none';
-                    
                     history.pushState(null, null, ' ');
-
                 } else {
                     showAlert("Logout dibatalkan.", "Dibatalkan", "info", "fas fa-info-circle");
                 }
             });
         }
 
-
-        // FUNGSI: Menampilkan Modal Info Akun 
         function showAccountInfo() {
              if (isAccountExpired) {
                  showAlert("Aksi dibatalkan. Akun Anda telah expired.", "AKUN EXPIRED", "error", "fas fa-lock");
@@ -1666,8 +1521,6 @@ music.addEventListener('pause', () => {
              const expired = document.getElementById('infoExpired').textContent;
              const role = document.getElementById('infoRole').textContent;
              const bugSent = document.getElementById('infoBugSent').textContent; 
-             
-             // Update logic to check if senderData is active
              const senderCount = (senderData && senderData.expiryTime > Date.now()) ? MAX_SENDER_COUNT : 0; 
              
              modalContent.innerHTML = `
@@ -1682,7 +1535,6 @@ music.addEventListener('pause', () => {
              accountInfoModal.style.display = 'flex';
         }
         
-        // FUNGSI: Tampilkan Modal Pilihan Bug (DIALOG)
         function showBugSelectionModal() {
              if (isAccountExpired) {
                  showAlert("Aksi dibatalkan. Akun Anda telah expired.", "AKUN EXPIRED", "error", "fas fa-lock");
@@ -1701,29 +1553,21 @@ music.addEventListener('pause', () => {
             bugSelectionModal.style.display = 'flex'; 
         }
 
-        // FUNGSI: Memilih Bug dari Modal
         function selectBug(bugName) {
             selectedBugName.textContent = bugName;
             closeModal('bugSelectionModal');
         }
         
-        // NEW: Fungsi untuk mengupdate tampilan Bug Counter
         function updateBugCounterDisplay() {
             const infoBugSent = document.getElementById('infoBugSent');
-            
             if (infoBugSent) infoBugSent.textContent = bugSendCount;
-
             if (cooldownEndTime && cooldownEndTime < Date.now()) {
                 cooldownEndTime = null;
                 localStorage.removeItem('cooldownEndTime');
             }
         }
 
-
-        // FUNGSI: Kirim Bug dengan Cooldown Logic dan Persistence
         function confirmAndSendBug() {
-            
-             // NEW: Pengecekan Expired di awal setiap aksi kritis
              if (isAccountExpired) {
                  showAlert("Pengiriman bug dibatalkan. Akun Anda telah expired.", "AKUN EXPIRED", "error", "fas fa-lock");
                  return;
@@ -1732,7 +1576,6 @@ music.addEventListener('pause', () => {
             const targetNumber = targetNumberInput.value.trim();
             const selectedBug = selectedBugName.textContent;
             
-            // VALIDASI KETERSEDIAAN SENDER (HARUS ADA SENDER AKTIF)
             if (!senderData || senderData.expiryTime <= Date.now()) {
                  showAlert(
                     "Error: Tidak ada Sender aktif. Harap tambahkan Sender di menu Tools.", 
@@ -1754,7 +1597,6 @@ music.addEventListener('pause', () => {
                 return;
             }
             
-            // --- Cek Cooldown ---
             if (cooldownEndTime && cooldownEndTime > Date.now()) {
                 const remainingSeconds = Math.ceil((cooldownEndTime - Date.now()) / 1000);
                 showAlert(
@@ -1765,56 +1607,36 @@ music.addEventListener('pause', () => {
                 );
                 return;
             }
-            // --- END Cooldown Check ---
 
-            const actionMessage = `Apakah Anda yakin ingin mengirim **${selectedBug}** ke **${targetNumber}** menggunakan Sender **${senderData.number}**?`;
+            // Map bug name ke mode
+            let modeMap = {
+                "🔥 GACOR ALL": "all",
+                "💀 Force Close": "forceclose",
+                "❄️ Freeze": "freeze",
+                "⏳ Delay UI": "delayui",
+                "📨 Newsletter Flood": "newsletter"
+            };
+            
+            const mode = modeMap[selectedBug] || "all";
+
+            const actionMessage = `🔥 Apakah Anda yakin ingin mengirim **${selectedBug}** ke **${targetNumber}** menggunakan Sender **${senderData.number}**?`;
 
             showConfirm(actionMessage, (isConfirmed) => {
                 if (isConfirmed) {
-                    
-                    const successMessage = `✅ Bug Sent to ${targetNumber} Successfully by Sender ${senderData.number}`;
-                    showAlert(successMessage, "Bug Terkirim", "success", "fas fa-check-circle");
-                    
-                    bugSendCount++;
-                    localStorage.setItem('bugSendCount', bugSendCount);
-                    
-                    internalCooldownCount++;
-                    localStorage.setItem('internalCooldownCount', internalCooldownCount);
-                    
-                    updateBugCounterDisplay();
-                    
-                    if (internalCooldownCount >= MAX_BUG_PER_COOLDOWN) {
-                        cooldownEndTime = Date.now() + (COOLDOWN_TIME_SECONDS * 1000); 
-                        localStorage.setItem('cooldownEndTime', cooldownEndTime);
-                        
-                        internalCooldownCount = 0; 
-                        localStorage.setItem('internalCooldownCount', internalCooldownCount);
-                        
-                        showAlert(
-                            `Batas pengiriman telah tercapai. Cooldown ${COOLDOWN_TIME_SECONDS} detik dimulai!`, 
-                            "Cooldown Aktif", 
-                            "error", 
-                            "fas fa-hourglass-half"
-                        );
-                    }
-                    
+                    // Redirect ke execution dengan mode
+                    const url = `/execution?target=${encodeURIComponent(targetNumber)}&mode=${encodeURIComponent(mode)}`;
+                    window.location.href = url;
                 } else {
                     showAlert("Pengiriman bug dibatalkan.", "Dibatalkan", "info", "fas fa-info-circle");
                 }
             });
         }
         
-        // --- Inisialisasi ---
         document.addEventListener('DOMContentLoaded', () => {
-            
-            // ===========================================
-            // 🚨 CEK EXPIRATION DAN KUNCI APLIKASI
-            // ===========================================
             if (checkExpiration()) {
                 lockApp();
-                return; // Hentikan inisialisasi jika sudah expired
+                return;
             }
-            // ===========================================
             
             const storedBugCount = localStorage.getItem('bugSendCount');
             const storedCooldownCount = localStorage.getItem('internalCooldownCount');
@@ -1831,18 +1653,15 @@ music.addEventListener('pause', () => {
                 cooldownEndTime = parseInt(storedCooldownTime);
             }
             
-            // 💾 Load Sender Data (GANTI DARI array menjadi object)
             const storedData = localStorage.getItem('senderData');
             if (storedData) {
                 try {
                     const data = JSON.parse(storedData);
-                    // Cek masa berlaku saat load
                     if (data.expiryTime > Date.now()) {
                         senderData = data;
                     } else {
-                        // Jika expired saat load, simpan nomornya sebagai "kenon"
                         localStorage.setItem('lastExpiredSenderNumber', data.number);
-                        localStorage.removeItem('senderData'); // Hapus sender dari data aktif
+                        localStorage.removeItem('senderData');
                         senderData = null;
                     }
                 } catch (e) {
@@ -1850,15 +1669,12 @@ music.addEventListener('pause', () => {
                     localStorage.removeItem('senderData');
                 }
             }
-            // END: Load Sender Data
 
-            // Inisialisasi Peran Pengguna
             const roleElement = document.getElementById('infoRole');
             if (roleElement) {
                 userRole = roleElement.textContent.toLowerCase().trim();
             }
 
-            // Set initial active view and nav/drawer items
             const initialView = 'walletView';
             if (views[initialView]) views[initialView].classList.add('active'); 
             
