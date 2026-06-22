@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEWA CRUSH</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0D0014;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        /* Background animasi */
+        .splash-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, #1a0033 0%, #0D0014 70%);
+            z-index: 0;
+        }
+
+        /* Bola-bola animasi */
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(190, 96, 238, 0.15);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .circle:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .circle:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            bottom: -50px;
+            left: -50px;
+            animation-delay: 2s;
+        }
+
+        .circle:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: 4s;
+            background: rgba(190, 96, 238, 0.05);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, -30px) scale(1.1); }
+        }
+
+        /* Konten utama */
+        .splash-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            animation: fadeInUp 1.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-splash {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid #BE60EE;
+            box-shadow: 0 0 40px rgba(190, 96, 238, 0.6);
+            margin-bottom: 30px;
+            object-fit: cover;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 40px rgba(190, 96, 238, 0.6);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 80px rgba(190, 96, 238, 0.9);
+                transform: scale(1.05);
+            }
+        }
+
+        .splash-title {
+            font-size: 42px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #BE60EE, #7D26A6, #BE60EE);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientMove 3s ease-in-out infinite;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+
+        @keyframes gradientMove {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .splash-sub {
+            color: #9A9A9A;
+            font-size: 16px;
+            letter-spacing: 5px;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .loading-bar {
+            width: 200px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .loading-bar-inner {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #7D26A6, #BE60EE);
+            border-radius: 10px;
+            animation: loading 2.5s ease-in-out forwards;
+        }
+
+        @keyframes loading {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        .splash-version {
+            color: #555;
+            font-size: 12px;
+            margin-top: 20px;
+            letter-spacing: 2px;
+        }
+
+        /* Efek partikel kecil */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #BE60EE;
+            border-radius: 50%;
+            animation: particleFloat 8s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% {
+                transform: translateY(-10vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background -->
+    <div class="splash-bg">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+
+    <!-- Partikel -->
+    <div id="particles"></div>
+
+    <!-- Konten -->
+    <div class="splash-content">
+        <img src="https://h.top4top.io/p_3825fr15u0.png" alt="ONYX CORE" class="logo-splash">
+        <h1 class="splash-title">ONYX CORE</h1>
+        <p class="splash-sub">DEVELOPER</p>
+        <div class="loading-bar">
+            <div class="loading-bar-inner"></div>
+        </div>
+        <p class="splash-version">SABAR KONTOL</p>
+    </div>
+
+    <script>
+        // Buat partikel
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 8 + 's';
+            particle.style.animationDuration = (6 + Math.random() * 4) + 's';
+            particle.style.width = (2 + Math.random() * 4) + 'px';
+            particle.style.height = particle.style.width;
+            particlesContainer.appendChild(particle);
+        }
+
+        // Redirect ke login.html setelah 3 detik
+        setTimeout(function() {
+            window.location.href = 'login.html';
+        }, 3000);
+    </script>
+
+</body>
+</html>
