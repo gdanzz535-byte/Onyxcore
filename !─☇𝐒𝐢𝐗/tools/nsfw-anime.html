@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- TEXT CHANGE TITLE -->
+    <title>NSFW Generator - Death Grave</title>
+
+    <!-- Fonts: Orbitron & Share Tech Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* === ROOT VARIABLES (DEATH GRAVE DASHBOARD THEME) === */
+        :root {
+            /* WARNA BACKGROUND DIUBAH KE HITAM PEKAT */
+            --bg-dark: #050505;
+            /* WARNA GRADIENT DIUBAH KE HITAM */
+            --bg-gradient: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #000000 80%);
+
+            /* WARNA CARD DIUBAH KE HITAM */
+            --card-bg: rgba(20, 20, 20, 0.9);
+            
+            /* WARNA UTAMA DIUBAH KE ORANGE */
+            --accent-pink: #ff9f43;
+            /* WARNA GELAP ORANGE */
+            --accent-purple: #e67e22;
+
+            /* WARNA CREAM AGAR KONTRAS */
+            --accent-cyan: #ffcc80;
+            
+            --accent-red: #ff4757;
+
+            --text-gray: #a4b0be;
+
+            --font-title: 'Share Tech Mono', monospace;
+            --font-code: 'Share Tech Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: var(--bg-gradient);
+            color: #ffffff;
+            font-family: var(--font-code);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* === PARTICLES BACKGROUND (ORANGE) === */
+        #particle-container {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            background: var(--accent-pink); /* WARNA PARTICLE ORANGE */
+            border-radius: 50%;
+            animation: floatUp linear infinite;
+            box-shadow: 0 0 6px rgba(255, 140, 0, 0.4);
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            10% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+        }
+
+        /* === HEADER === */
+        header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 40px 25px 20px;
+            background: rgba(5, 5, 5, 0.95);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            z-index: 5;
+        }
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 25px; right: 25px;
+            height: 1px;
+            /* GARIS BAWAH HEADER ORANGE */
+            background: linear-gradient(90deg, transparent, rgba(255, 140, 0, 0.3), rgba(230, 126, 34, 0.3), transparent);
+        }
+
+        .back-btn {
+            /* BACKGROUND BACK BUTTON ORANGE TRANSPARENT */
+            background: rgba(255, 140, 0, 0.1);
+            /* BORDER BACK BUTTON ORANGE */
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            color: var(--accent-pink);
+            border-radius: 12px;
+            padding: 10px 15px;
+            font-size: 12px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+        .back-btn:active {
+            background: rgba(255, 140, 0, 0.2);
+            transform: scale(0.97);
+        }
+
+        .brand-title {
+            font-family: var(--font-title);
+            font-size: 20px;
+            font-weight: 700;
+            /* TEXT SHADOW ORANGE */
+            text-shadow: 0 0 10px rgba(255, 140, 0, 0.6);
+        }
+
+        /* === MAIN === */
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 20px 60px;
+            scroll-behavior: smooth;
+        }
+
+        /* === TOOLS HEADER (TITLE + LOGO) === */
+        .tools-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 25px 0 25px;
+        }
+
+        .tools-title-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .tools-logo {
+            width: 50px; height: 50px;
+            /* BACKGROUND LOGO ORANGE GRADIENT */
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            border-radius: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
+        }
+
+        .tools-text h2 {
+            font-family: var(--font-title);
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 2px;
+        }
+        .tools-text p {
+            font-size: 11px;
+            /* TEKS ORANGE */
+            color: var(--accent-pink);
+        }
+
+        .owner-badge {
+            border: 2px solid var(--accent-pink);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            /* TEKS BADGE ORANGE */
+            color: var(--accent-pink);
+            background: rgba(255, 140, 0, 0.15);
+            font-weight: 700;
+            font-family: var(--font-title);
+        }
+
+        /* === SECTION TITLE === */
+        .section-title {
+            font-family: var(--font-title);
+            font-size: 15px;
+            font-weight: 700;
+            /* BORDER KIRI ORANGE */
+            border-left: 3px solid var(--accent-pink);
+            padding-left: 10px;
+            margin-bottom: 12px;
+            margin-top: 20px;
+        }
+
+        /* === CARD STYLE (UNTUK NSFW BOX) === */
+        .input-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 22px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            margin-bottom: 25px;
+            position: relative;
+        }
+        .input-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 2px;
+            /* GRADIEN ATAS KARTU ORANGE */
+            background: linear-gradient(90deg, transparent, var(--accent-pink), transparent);
+            opacity: 0.7;
+        }
+
+        /* === BUTTONS === */
+        .btn-process {
+            width: 100%;
+            padding: 16px;
+            border-radius: 15px;
+            /* BACKGROUND BUTTON ORANGE GRADIENT */
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            color: white;
+            border: none;
+            font-family: var(--font-title);
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.2s;
+            box-shadow: 0 5px 15px rgba(255, 140, 0, 0.3);
+        }
+        .btn-process:active {
+            transform: scale(0.98);
+        }
+
+        .btn-download {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 15px;
+            font-family: var(--font-title);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            justify-content: center;
+            text-align: center;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+        .btn-download:hover {
+            /* BORDER DOWNLOAD ORANGE */
+            border-color: var(--accent-cyan);
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* === RESULT CARD === */
+        .result-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 22px;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === TOAST === */
+        .toast {
+            position: fixed;
+            top: 120px; left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 20px;
+            border-radius: 12px;
+            /* BORDER TOAST ORANGE */
+            border: 1px solid var(--accent-pink);
+            background: rgba(26, 11, 46, 0.95);
+            /* TEKS TOAST ORANGE */
+            color: var(--accent-pink);
+            font-family: var(--font-title);
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+            z-index: 9999;
+            box-shadow: 0 5px 20px rgba(219, 39, 119, 0.2);
+            display: none;
+        }
+
+        /* === NSFW EXTRA ELEMENTS (image, blur, log) === */
+
+        .image-container {
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            background: black;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+            height: 400px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .result-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .result-image.blurred {
+            filter: blur(20px) brightness(0.5);
+        }
+
+        .blur-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            backdrop-filter: blur(4px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.4);
+            z-index: 5;
+        }
+
+        .blur-overlay.hidden { display: none; }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 14px;
+            /* BACKGROUND BUTTON ACTION ORANGE GRADIENT */
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            border-radius: 12px;
+            border: none;
+            color: white;
+            font-family: var(--font-title);
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .action-btn.secondary-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .terminal-log {
+            /* BACKGROUND TERMINAL HITAM */
+            background: #0a0a0a;
+            border: 1px solid #333;
+            padding: 12px;
+            border-radius: 12px;
+            /* TEKS TERMINAL ORANGE */
+            color: var(--accent-pink);
+            font-family: monospace;
+            font-size: 11px;
+            height: 120px;
+            overflow-y: auto;
+        }
+
+        .log-line { margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+<div id="particle-container"></div>
+
+<header>
+    <a href="/dashboard" class="back-btn">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M19 12H5M12 19l-7-7 7-7"></path>
+        </svg>
+        BACK
+    </a>
+    <!-- TEXT CHANGE BRAND TITLE (KEEPING SPECIFIC TOOL NAME) -->
+    <div class="brand-title">NSFW GENERATOR</div>
+</header>
+
+<main>
+    <div class="tools-header">
+        <div class="tools-title-group">
+            <div class="tools-logo">
+                <i class="fa-solid fa-fire" style="font-size:28px;color:white;"></i>
+            </div>
+            <div class="tools-text">
+                <h2>NSFW GENERATOR</h2>
+                <p>Generate Random Anime NSFW</p>
+            </div>
+        </div>
+        <div class="owner-badge" id="user-badge">USER</div>
+    </div>
+
+    <!-- SECTION TITLE -->
+    <div class="section-title">NSFW GENERATOR PANEL</div>
+
+    <!-- NSFW CARD -->
+    <div class="input-card">
+
+        <!-- Auto Blur Toggle -->
+        <div class="toggle-switch" style="
+            background: rgba(0,0,0,0.3);
+            padding: 12px 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        ">
+            <span style="font-size: 12px; color: var(--text-gray);">
+                <i class="fa-solid fa-eye-slash"></i> Auto Blur (Safe Mode)
+            </span>
+
+            <label class="switch">
+                <input type="checkbox" id="blurToggle" checked onchange="toggleBlurState()">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <!-- IMAGE PREVIEW -->
+        <div class="image-container" id="imageContainer" onclick="toggleImageReveal()">
+
+            <div class="loader" id="loader" 
+                style="
+                    width: 40px; height: 40px;
+                    /* BORDER SPINNER ORANGE */
+                    border: 4px solid var(--accent-pink);
+                    border-bottom-color: transparent;
+                    border-radius: 50%;
+                    animation: spin 1s linear infinite;
+                    display: none;
+                    position: absolute;
+                    z-index: 10;
+                ">
+            </div>
+
+            <img 
+                src="https://via.placeholder.com/600x800/222/555?text=Ready+To+Generate" 
+                class="result-image" 
+                id="resultImage">
+
+            <div class="blur-overlay" id="blurOverlay">
+                <i class="fa-solid fa-eye-slash eye-icon" style="
+                    font-size: 40px;
+                    color: rgba(255,255,255,0.85);
+                    margin-bottom: 8px;
+                "></i>
+                <span style="font-family: var(--font-title); font-size: 12px; color:#fff;">
+                    Tap to Reveal
+                </span>
+            </div>
+
+        </div>
+
+        <!-- CONTROL BUTTONS -->
+        <div class="controls-grid">
+            <button class="action-btn" id="genBtn" onclick="generateWithRetry()">
+                <i class="fa-solid fa-dice"></i> GENERATE
+            </button>
+
+            <button class="action-btn secondary-btn" id="downloadBtn" onclick="downloadImage()">
+                <i class="fa-solid fa-download"></i> SAVE
+            </button>
+        </div>
+
+        <!-- API STATUS -->
+        <div class="api-status" style="
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            margin-bottom: 10px;
+            color: var(--text-gray);
+        ">
+            <div class="status-dot" id="apiStatus" style="
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: #ff4444;
+            "></div>
+            <span id="apiStatusText">API Status: Checking...</span>
+        </div>
+
+    </div>
+
+    <!-- TERMINAL LOG -->
+    <div class="terminal-log" id="log">
+        <!-- Konsol log akan muncul otomatis dari script -->
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span id="toast-msg">Message here</span>
+    </div>
+
+</main>
+
+<script>
+    // Sidebar
+    function toggleSidebar() {
+        document.getElementById('mainSidebar')?.classList.toggle('active');
+        document.querySelector('.overlay-backdrop')?.classList.toggle('active');
+    }
+
+    // Utils
+    const utils = {
+        log: (msg, type = '') => {
+            const log = document.getElementById('log');
+            const line = document.createElement('div');
+            line.className = 'log-line';
+            if(type === 'error') line.style.color = '#ff4444';
+            if(type === 'success') line.style.color = '#00ff88';
+            if(type === 'warning') line.style.color = '#ffaa00';
+            if(type === 'info') line.style.color = '#00aaff';
+            line.innerText = `> ${msg}`;
+            log.appendChild(line);
+            log.scrollTop = log.scrollHeight;
+        },
+        toast: (msg, type = 'info') => {
+            const t = document.getElementById('toast');
+            const icon = t.querySelector('i');
+            const msgSpan = document.getElementById('toast-msg');
+            
+            if (type === 'error') {
+                icon.className = 'fa-solid fa-circle-xmark';
+                t.style.borderColor = '#ff4444';
+            } else if (type === 'success') {
+                icon.className = 'fa-solid fa-circle-check';
+                t.style.borderColor = '#00ff88';
+            } else if (type === 'warning') {
+                icon.className = 'fa-solid fa-triangle-exclamation';
+                t.style.borderColor = '#ffaa00';
+            } else {
+                icon.className = 'fa-solid fa-circle-info';
+                t.style.borderColor = '#00aaff';
+            }
+            
+            msgSpan.innerText = msg;
+            t.classList.add('show');
+            t.style.display = 'flex';
+
+            setTimeout(() => {
+                t.classList.remove('show');
+                setTimeout(() => t.style.display = 'none', 300);
+            }, 3000);
+        },
+        updateApiStatus: (status) => {
+            const statusDot = document.getElementById('apiStatus');
+            const statusText = document.getElementById('apiStatusText');
+            
+            if (status === 'connected') {
+                statusDot.className = 'status-dot active';
+                statusText.innerText = 'API Status: Connected';
+                /* WARNA TEXT SUCCESS HIJAU */
+                statusText.style.color = '#00ff88';
+            } else if (status === 'error') {
+                statusDot.className = 'status-dot';
+                statusText.innerText = 'API Status: Error - Using Fallback';
+                /* WARNA TEXT ERROR MERAH */
+                statusText.style.color = '#ff4444';
+            } else {
+                statusDot.className = 'status-dot';
+                statusText.innerText = 'API Status: Checking...';
+                statusText.style.color = '#ffaa00';
+            }
+        }
+    };
+
+    // State
+    let isBlurEnabled = true;
+    let currentImageUrl = "";
+    let retryCount = 0;
+    const MAX_RETRIES = 3;
+
+    // Blur toggle
+    function toggleBlurState() {
+        isBlurEnabled = document.getElementById('blurToggle').checked;
+        applyBlur();
+        utils.log(`Safe Mode: ${isBlurEnabled ? 'ON' : 'OFF'}`, 'info');
+    }
+
+    function applyBlur() {
+        const img = document.getElementById('resultImage');
+        const overlay = document.getElementById('blurOverlay');
+        
+        if (isBlurEnabled && currentImageUrl && !currentImageUrl.includes('placeholder')) {
+            img.classList.add('blurred');
+            overlay.classList.remove('hidden');
+        } else {
+            img.classList.remove('blurred');
+            overlay.classList.add('hidden');
+        }
+    }
+
+    function toggleImageReveal() {
+        if (isBlurEnabled) {
+            const img = document.getElementById('resultImage');
+            const overlay = document.getElementById('blurOverlay');
+            
+            if (img.classList.contains('blurred')) {
+                img.classList.remove('blurred');
+                overlay.classList.add('hidden');
+                utils.log("Image revealed temporarily", 'info');
+            } else {
+                img.classList.add('blurred');
+                overlay.classList.remove('hidden');
+                utils.log("Image blurred for safety", 'info');
+            }
+        }
+    }
+
+    // Main generator
+    async function generateNSFW() {
+        const btn = document.getElementById('genBtn');
+        const loader = document.getElementById('loader');
+        const img = document.getElementById('resultImage');
+        const downloadBtn = document.getElementById('downloadBtn');
+        
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> LOADING...';
+        loader.style.display = 'block';
+        img.style.opacity = '0.5';
+        downloadBtn.disabled = true;
+        
+        utils.log("Requesting NSFW image from API...", 'info');
+        utils.updateApiStatus('checking');
+
+        try {
+            const response = await fetch('/api/nsfw/random');
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+
+            if (data.success && data.image) {
+                currentImageUrl = data.image;
+                
+                await new Promise((resolve, reject) => {
+                    const newImg = new Image();
+                    newImg.onload = () => resolve(newImg);
+                    newImg.onerror = () => reject(new Error("Failed to load image"));
+                    newImg.src = data.image;
+                    setTimeout(() => reject(new Error("Image loading timeout")), 15000);
+                });
+                
+                img.src = data.image;
+                img.style.opacity = '1';
+                loader.style.display = 'none';
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-dice"></i> GENERATE';
+                downloadBtn.disabled = false;
+                
+                retryCount = 0;
+                applyBlur();
+                
+                utils.log("Image loaded successfully from API", 'success');
+                utils.toast("New Image Generated!", 'success');
+                utils.updateApiStatus('connected');
+                
+            } else {
+                throw new Error(data.error || "Invalid API response");
+            }
+
+        } catch (error) {
+            console.error('Generation Error:', error);
+            utils.log(`API Error: ${error.message}`, 'error');
+            utils.toast("API Error - Trying fallback", 'warning');
+            
+            try {
+                const fallbackImages = [
+                    'https://i.imgur.com/6VYXp6v.jpeg',
+                    'https://i.imgur.com/9E8aYWV.jpeg',
+                    'https://i.imgur.com/3Q7Y4zv.jpeg'
+                ];
+                
+                const randomIndex = Math.floor(Math.random() * fallbackImages.length);
+                currentImageUrl = fallbackImages[randomIndex];
+                
+                img.src = currentImageUrl;
+                img.style.opacity = '1';
+                loader.style.display = 'none';
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-dice"></i> GENERATE';
+                downloadBtn.disabled = false;
+                
+                applyBlur();
+                
+                utils.log("Using fallback image", 'warning');
+                utils.toast("Using fallback image", 'warning');
+                utils.updateApiStatus('error');
+                
+            } catch (fallbackError) {
+                utils.log("All image sources failed", 'error');
+                utils.toast("All image sources failed", 'error');
+                
+                loader.style.display = 'none';
+                img.style.opacity = '1';
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-dice"></i> GENERATE';
+                downloadBtn.disabled = true;
+            }
+        }
+    }
+
+    async function generateWithRetry() {
+        if (retryCount >= MAX_RETRIES) {
+            utils.log("Max retries reached. Please try again later.", 'error');
+            utils.toast("Max retries reached", 'error');
+            return;
+        }
+        
+        retryCount++;
+        utils.log(`Attempt ${retryCount}/${MAX_RETRIES}...`, 'info');
+        await generateNSFW();
+    }
+
+    function downloadImage() {
+        if (!currentImageUrl || currentImageUrl.includes('placeholder')) {
+            utils.toast("No image to download!", 'error');
+            return;
+        }
+        
+        utils.toast("Downloading image...", 'info');
+        utils.log("Starting download process...", 'info');
+        
+        try {
+            const a = document.createElement('a');
+            a.href = currentImageUrl;
+            a.download = `nsfw_${Date.now()}.jpg`;
+            a.target = '_blank';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            utils.log("Download initiated successfully", 'success');
+        } catch (error) {
+            utils.log(`Download failed: ${error.message}`, 'error');
+            utils.toast("Download failed - Try again", 'error');
+            
+            window.open(currentImageUrl, '_blank');
+        }
+    }
+
+    async function testApiConnection() {
+        try {
+            const response = await fetch('/api/nsfw/random');
+            if (response.ok) {
+                utils.updateApiStatus('connected');
+            } else {
+                throw new Error(`HTTP ${response.status}`);
+            }
+        } catch (error) {
+            utils.updateApiStatus('error');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        applyBlur();
+        testApiConnection();
+
+        // Particles from template
+        const container = document.getElementById('particle-container');
+        const particleCount = 35;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            const size = Math.random() * 3 + 2;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${Math.random() * 100}vw`;
+            particle.style.top = `${Math.random() * 100}vh`;
+            particle.style.animationDuration = `${Math.random() * 15 + 10}s`;
+            particle.style.animationDelay = `-${Math.random() * 20}s`;
+            container.appendChild(particle);
+        }
+    });
+</script>
+</body>
+</html>

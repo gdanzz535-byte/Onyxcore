@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NGL Spam Tool - Indictive Core</title>
+    
+    <!-- Load Font: Orbitron & Share Tech Mono (sama seperti dashboard) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Axios for HTTP requests -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <style>
+        /* --- VARIABLES SAMA SEPERTI DASHBOARD --- */
+        :root {
+            --bg-dark: #080310;       
+            --bg-gradient: radial-gradient(circle at 50% 0%, #1a0b2e 0%, #080310 80%);
+            
+            --card-bg: rgba(26, 11, 46, 0.85);       
+            --accent-pink: #db2777;   
+            --accent-purple: #9333ea; 
+            
+            --accent-red: #ff3333;
+            --accent-red-dark: #cc0000;
+            --accent-green: #10b981;
+            --accent-cyan: #06b6d4;
+            --text-gray: #9ca3af; 
+            
+            /* FONT DEFINITIONS (sama seperti dashboard) */
+            --font-title: 'Share Tech Mono', sans-serif;
+            --font-code: 'Share Tech Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        
+        body {
+            background-color: var(--bg-dark);
+            background-image: var(--bg-gradient);
+            color: #ffffff;
+            font-family: var(--font-code);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- BACKGROUND PARTICLES (sama seperti dashboard) --- */
+        #particle-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none; overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6); 
+            border-radius: 50%;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+            animation: floatUp linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+        }
+
+        /* --- HEADER (sama seperti dashboard) --- */
+        header {
+            display: flex; 
+            align-items: center; 
+            gap: 16px; 
+            padding: 20px 25px; 
+            padding-top: 40px; 
+            padding-bottom: 20px; 
+            background: rgba(8, 3, 16, 0.95);
+            z-index: 50;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+        
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 25px; right: 25px; height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(219, 39, 119, 0.3) 20%, rgba(147, 51, 234, 0.3) 80%, transparent 100%);
+        }
+
+        .brand-title { 
+            font-family: var(--font-title);
+            font-size: 20px; 
+            font-weight: 700; 
+            letter-spacing: 1px; 
+            color: #fff;
+            text-shadow: 0 0 10px rgba(219, 39, 119, 0.6);
+            line-height: 1.1; padding-top: 1px; 
+        }
+        
+        .header-icon { 
+            color: #fff; cursor: pointer; flex-shrink: 0; margin-top: 2px;
+            transition: transform 0.2s;
+        }
+        .header-icon:active { transform: scale(0.9); color: var(--accent-pink); }
+
+        /* --- BACK BUTTON --- */
+        .back-btn {
+            background: rgba(219, 39, 119, 0.1);
+            border: 1px solid rgba(219, 39, 119, 0.3);
+            color: var(--accent-pink);
+            border-radius: 12px;
+            padding: 10px 15px;
+            font-family: var(--font-code);
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        
+        .back-btn:active { 
+            background: rgba(219, 39, 119, 0.2); 
+            transform: scale(0.98);
+        }
+
+        /* --- MAIN CONTENT (sama seperti dashboard) --- */
+        main { 
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 0 20px; 
+            padding-bottom: 30px; 
+            scroll-behavior: smooth; 
+            padding-top: 0; 
+            position: relative;
+        }
+
+        /* --- TOOLS HEADER STYLE (sama seperti dashboard) --- */
+        .tools-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 25px;
+            margin-top: 20px;
+        }
+        .tools-title-group { display: flex; align-items: center; gap: 15px; }
+        .tools-logo { 
+            width: 50px; height: 50px; 
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 20px rgba(219, 39, 119, 0.5);
+            animation: pulsePink 2s infinite;
+        }
+        @keyframes pulsePink {
+            0% { box-shadow: 0 0 15px rgba(219, 39, 119, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(219, 39, 119, 0.7); }
+            100% { box-shadow: 0 0 15px rgba(219, 39, 119, 0.5); }
+        }
+        .tools-text h2 { 
+            font-family: var(--font-title);
+            font-size: 24px; 
+            font-weight: 700; 
+            letter-spacing: 0.5px; 
+            color: #fff; margin-bottom: 2px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        .tools-text p { 
+            font-family: var(--font-code);
+            font-size: 11px; 
+            color: var(--accent-pink); 
+            font-weight: 400; 
+            letter-spacing: 0px; 
+            text-shadow: 0 0 8px rgba(219, 39, 119, 0.6);
+        }
+        
+        .owner-badge {
+            border: 2px solid var(--accent-pink);
+            color: var(--accent-pink);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px; 
+            font-weight: 700; 
+            letter-spacing: 0px;
+            background: rgba(219, 39, 119, 0.15);
+            box-shadow: 0 0 10px rgba(219, 39, 119, 0.3);
+            font-family: var(--font-title);
+        }
+
+        /* --- CARD STYLES (dengan gaya dashboard) --- */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 22px;
+            padding: 25px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-pink), transparent);
+            opacity: 0.7;
+        }
+
+        /* --- SIMPLE LIMIT INFO --- */
+        .limit-info-simple {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+            font-family: var(--font-code);
+        }
+
+        .limit-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .limit-label {
+            font-size: 11px;
+            color: var(--text-gray);
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .limit-value {
+            font-family: var(--font-title);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent-pink);
+        }
+
+        /* --- INPUT GROUPS (dengan gaya dashboard) --- */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-family: var(--font-code);
+            font-size: 13px;
+            color: var(--text-gray);
+            font-weight: 400;
+        }
+
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-family: var(--font-code);
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+        }
+
+        /* --- CONTROLS STYLES YANG LEBIH RAPIH --- */
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .control-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .control-label {
+            font-family: var(--font-code);
+            font-size: 13px;
+            color: var(--text-gray);
+            min-width: 120px;
+        }
+
+        .control-input {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .control-input input[type="range"] {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .control-input input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-pink);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(219, 39, 119, 0.5);
+        }
+
+        .control-value {
+            min-width: 70px;
+            text-align: center;
+            background: rgba(219, 39, 119, 0.2);
+            color: var(--accent-pink);
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-family: var(--font-title);
+            font-weight: 700;
+            font-size: 14px;
+            border: 1px solid rgba(219, 39, 119, 0.3);
+        }
+
+        /* --- PROGRESS BAR --- */
+        .progress-container {
+            margin: 25px 0 15px 0;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-family: var(--font-code);
+            font-size: 11px;
+            color: var(--text-gray);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-pink), var(--accent-purple));
+            border-radius: 10px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        /* --- ACTION BUTTONS --- */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin: 20px 0 10px 0;
+        }
+
+        .btn {
+            padding: 16px;
+            font-family: var(--font-title);
+            font-weight: 700;
+            font-size: 14px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            color: white;
+            box-shadow: 0 5px 15px rgba(219, 39, 119, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(219, 39, 119, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-pink);
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* --- LOG CONTAINER --- */
+        .log-container {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+            height: 200px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            font-family: var(--font-code);
+            font-size: 12px;
+        }
+
+        .log-entry {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+
+        .success { color: var(--accent-green); }
+        .error { color: var(--accent-red); }
+        .warning { color: #eab308; }
+        .info { color: var(--accent-cyan); }
+
+        /* --- NOTIFICATION STYLE --- */
+        .notification {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(26, 11, 46, 0.95);
+            color: var(--accent-pink);
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-family: var(--font-title);
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            z-index: 9999;
+            border: 1px solid rgba(219, 39, 119, 0.3);
+            box-shadow: 0 4px 15px rgba(219, 39, 119, 0.2);
+            animation: slideIn 0.3s ease-out;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            font-size: 13px;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-50%) translateY(-15px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateX(-50%) translateY(0); opacity: 1; }
+            to { transform: translateX(-50%) translateY(-15px); opacity: 0; }
+        }
+
+        /* --- WARNING MESSAGE --- */
+        .warning-message {
+            display: none;
+            background: rgba(255, 51, 51, 0.1);
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+            font-family: var(--font-code);
+            font-size: 12px;
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 768px) {
+            .control-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .control-label {
+                min-width: auto;
+            }
+            
+            .control-input {
+                width: 100%;
+            }
+        }
+
+        /* --- LOADING ANIMATION --- */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent-pink);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Particles -->
+    <div id="particle-container"></div>
+
+    <!-- Header -->
+    <header>
+        <a href="/dashboard" class="back-btn">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M19 12H5M12 19l-7-7 7-7"></path>
+            </svg>
+            BACK
+        </a>
+        <div class="brand-title">NGL SPAM TOOL</div>
+    </header>
+
+    <main>
+        <!-- Tools Header -->
+        <div class="tools-header">
+            <div class="tools-title-group">
+                <div class="tools-logo">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#FFFFFF"><path d="M880-80 720-240H320q-33 0-56.5-23.5T240-320v-40h440q33 0 56.5-23.5T760-440v-280h40q33 0 56.5 23.5T880-640v560ZM160-473l47-47h393v-280H160v327ZM80-280v-520q0-33 23.5-56.5T160-880h440q33 0 56.5 23.5T680-800v280q0 33-23.5 56.5T600-440H240L80-280Zm80-240v-280 280Z"/></svg>
+                </div>
+                <div class="tools-text">
+                    <h2>NGL SPAM TOOL</h2>
+                    <p>Advanced Message Delivery System</p>
+                </div>
+            </div>
+            <div class="owner-badge" id="user-badge">USER</div>
+        </div>
+
+        <!-- Simple Limit Info -->
+        <div class="limit-info-simple">
+            <div class="limit-item">
+                <span class="limit-label">LIMIT TODAY</span>
+                <span class="limit-value" id="usageToday">0 / 200</span>
+            </div>
+            <div class="limit-item">
+                <span class="limit-label">RESET IN</span>
+                <span class="limit-value" id="resetTimer">--:--:--</span>
+            </div>
+        </div>
+
+        <!-- Main Form -->
+        <div class="card">
+            <div class="input-group">
+                <label><i class="fas fa-user"></i> Target NGL Username</label>
+                <input type="text" id="target" placeholder="Enter NGL username (without @)...">
+            </div>
+
+            <div class="input-group">
+                <label><i class="fas fa-comment-alt"></i> Message to Spam</label>
+                <textarea id="message" placeholder="Enter message to spam...">Hallo</textarea>
+            </div>
+
+            <!-- Controls -->
+            <div class="control-group">
+                <div class="control-row">
+                    <span class="control-label"><i class="fas fa-paper-plane"></i> Message Count</span>
+                    <div class="control-input">
+                        <input type="range" id="countRange" min="1" max="50" value="10">
+                        <input type="number" id="count" min="1" max="50" value="10" class="control-value">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress -->
+            <div class="progress-container">
+                <div class="progress-header">
+                    <span>Progress</span>
+                    <span id="progressText">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="startAttack()" id="attackBtn">
+                    <i class="fas fa-play"></i> START ATTACK
+                </button>
+                <button class="btn btn-secondary" onclick="clearLog()">
+                    <i class="fas fa-broom"></i> CLEAR LOG
+                </button>
+            </div>
+
+            <div id="limitWarning" class="warning-message">
+                ⚠️ Daily limit reached. Reset at midnight.
+            </div>
+        </div>
+
+        <!-- Log -->
+        <div class="card">
+            <div class="log-container" id="log">
+                <!-- Log entries will appear here -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Partikel background
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('particle-container');
+            const particleCount = 25;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 2 + 1;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100}vh`;
+                
+                const duration = Math.random() * 15 + 10;
+                particle.style.animationDuration = `${duration}s`;
+                
+                particle.style.animationDelay = `-${Math.random() * 20}s`;
+
+                container.appendChild(particle);
+            }
+
+            // Load user stats
+            loadUserStats();
+            
+            // Check target stats
+            const targetInput = document.getElementById('target');
+            targetInput.addEventListener('blur', checkTargetStats);
+        });
+
+        // ===== VARIABEL DAN FUNGSI UTAMA =====
+        
+        let isRunning = false;
+        let currentAttack = null;
+        let userData = {
+            usageToday: 0,
+            maxDailyLimit: 200,
+            remaining: 200
+        };
+
+        // Fungsi utilitas
+        const utils = {
+            delay: ms => new Promise(r => setTimeout(r, ms)),
+            
+            logMessage: (msg, type = 'info') => {
+                const log = document.getElementById('log');
+                const entry = document.createElement('div');
+                entry.className = `log-entry ${type}`;
+                entry.innerHTML = `[${new Date().toLocaleTimeString()}] ${msg}`;
+                log.appendChild(entry);
+                log.scrollTop = log.scrollHeight;
+            },
+            
+            updateProgress: (current, total) => {
+                if (total > 0) {
+                    const progress = (current / total) * 100;
+                    document.getElementById('progressFill').style.width = `${Math.min(progress, 100)}%`;
+                    document.getElementById('progressText').textContent = `${Math.round(progress)}%`;
+                }
+            },
+
+            updateUsageStats: () => {
+                document.getElementById('usageToday').textContent = 
+                    `${userData.usageToday} / ${userData.maxDailyLimit}`;
+                
+                const countInput = document.getElementById('count');
+                countInput.max = Math.min(50, userData.remaining);
+                
+                if (userData.remaining <= 0) {
+                    document.getElementById('attackBtn').disabled = true;
+                    document.getElementById('limitWarning').style.display = 'block';
+                } else {
+                    document.getElementById('attackBtn').disabled = false;
+                    document.getElementById('limitWarning').style.display = 'none';
+                }
+            },
+
+            showNotification: (message, type = 'info') => {
+                // Remove existing notification
+                const existing = document.querySelector('.notification');
+                if (existing) existing.remove();
+                
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.animation = 'slideOut 0.3s ease-out';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+        };
+
+        // Fungsi untuk mengambil statistik user
+        async function loadUserStats() {
+            try {
+                const response = await axios.get('/api/ngl-stats');
+                if (response.data) {
+                    userData.usageToday = response.data.userStats.todayUsage;
+                    userData.maxDailyLimit = response.data.userStats.dailyLimit;
+                    userData.remaining = response.data.userStats.remaining;
+                    utils.updateUsageStats();
+                    utils.logMessage('✅ User stats loaded successfully', 'success');
+                }
+            } catch (error) {
+                console.error('Failed to load user stats:', error);
+                utils.logMessage('⚠️ Failed to load user stats, using default limits', 'warning');
+            }
+        }
+
+        // Fungsi untuk memeriksa statistik target
+        async function checkTargetStats() {
+            const target = document.getElementById('target').value.trim();
+            if (!target) return;
+            
+            try {
+                const response = await axios.get(`/api/ngl-target-stats/${target}`);
+                if (response.data) {
+                    const remaining = response.data.remaining;
+                    if (remaining <= 0) {
+                        utils.showNotification(`⚠️ Target ${target} has reached daily limit!`, 'warning');
+                    } else {
+                        utils.showNotification(`✅ Target ${target} can receive ${remaining} more messages today`, 'success');
+                    }
+                }
+            } catch (error) {
+                // Ignore error for target stats
+            }
+        }
+
+        // Fungsi utama attack (menggunakan backend API)
+        async function startAttack() {
+            if (isRunning) {
+                utils.showNotification("Attack sedang berjalan!", 'warning');
+                return;
+            }
+            
+            const target = document.getElementById('target').value.trim();
+            const message = document.getElementById('message').value.trim();
+            const count = parseInt(document.getElementById('count').value);
+
+            // Validasi input
+            if (!target || !message) {
+                utils.showNotification("Harap isi Target dan Pesan!", 'error');
+                return;
+            }
+
+            // Validasi limit
+            if (count > userData.remaining) {
+                utils.showNotification(`Jumlah pesan melebihi sisa limit harian! Sisa: ${userData.remaining} pesan`, 'error');
+                return;
+            }
+
+            // Reset state
+            isRunning = true;
+            
+            // Update UI
+            const attackBtn = document.getElementById('attackBtn');
+            attackBtn.innerHTML = '<span class="loading"></span> PROCESSING...';
+            attackBtn.disabled = true;
+            
+            document.getElementById('log').innerHTML = "";
+            utils.updateProgress(0, count);
+            
+            utils.logMessage(`🚀 Starting attack on ${target}...`, "info");
+            utils.logMessage(`📝 Message: ${message}`, "info");
+            utils.logMessage(`🔢 Count: ${count} messages`, "info");
+            utils.logMessage(`⏳ Sending to backend API...`, "info");
+
+            try {
+                // Kirim request ke backend API
+                const response = await axios.post('/api/ngl-spam-js', {
+                    target,
+                    message,
+                    count
+                });
+
+                if (response.data && response.data.success !== false) {
+                    // Tampilkan log dari backend
+                    if (response.data.logs && Array.isArray(response.data.logs)) {
+                        response.data.logs.forEach(log => {
+                            let type = 'info';
+                            if (log.includes('✅') || log.includes('BERHASIL')) type = 'success';
+                            else if (log.includes('⚠️') || log.includes('PERINGATAN')) type = 'warning';
+                            else if (log.includes('❌') || log.includes('GAGAL')) type = 'error';
+                            utils.logMessage(log, type);
+                        });
+                    }
+
+                    // Update progress
+                    utils.updateProgress(count, count);
+                    
+                    // Update user stats
+                    if (response.data.stats) {
+                        userData.usageToday = response.data.stats.userToday;
+                        userData.remaining = response.data.stats.remaining?.user || 
+                                           (userData.maxDailyLimit - userData.usageToday);
+                        utils.updateUsageStats();
+                    }
+                    
+                    utils.showNotification(`✅ Attack completed! Sent: ${response.data.success || 0} messages`, 'success');
+                } else {
+                    utils.logMessage(`❌ API Error: ${response.data?.error || 'Unknown error'}`, "error");
+                    utils.showNotification(`❌ Failed: ${response.data?.error || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                let errorMessage = 'Unknown error';
+                if (error.response) {
+                    // Server responded with error
+                    errorMessage = error.response.data?.error || 
+                                  `HTTP ${error.response.status}: ${error.response.statusText}`;
+                    
+                    if (error.response.data?.message) {
+                        utils.logMessage(`📝 ${error.response.data.message}`, "info");
+                    }
+                    
+                    // Jika limit tercapai
+                    if (error.response.status === 429) {
+                        if (error.response.data?.currentUsage) {
+                            userData.usageToday = error.response.data.currentUsage;
+                            userData.remaining = error.response.data.remaining || 0;
+                            utils.updateUsageStats();
+                        }
+                    }
+                } else if (error.request) {
+                    errorMessage = 'Network error: No response from server';
+                } else {
+                    errorMessage = error.message;
+                }
+                
+                utils.logMessage(`❌ Error: ${errorMessage}`, "error");
+                utils.showNotification(`❌ Error: ${errorMessage}`, 'error');
+            } finally {
+                isRunning = false;
+                attackBtn.innerHTML = '<i class="fas fa-play"></i> START ATTACK';
+                attackBtn.disabled = false;
+            }
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+            utils.logMessage('🗑️ Log cleared', "info");
+        }
+
+        // Countdown timer ke midnight (WIB)
+        function updateResetTimer() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0); // Midnight WIB
+            
+            const diff = tomorrow - now;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            const timerElement = document.getElementById('resetTimer');
+            if (timerElement) {
+                timerElement.textContent = 
+                    String(hours).padStart(2, '0') + ':' +
+                    String(minutes).padStart(2, '0') + ':' +
+                    String(seconds).padStart(2, '0');
+            }
+        }
+
+        // Event listeners ketika halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sync range dan number inputs untuk count
+            const countRange = document.getElementById('countRange');
+            const countNumber = document.getElementById('count');
+            
+            countRange.addEventListener('input', () => {
+                countNumber.value = countRange.value;
+            });
+            
+            countNumber.addEventListener('input', () => {
+                const value = Math.min(Math.max(countNumber.min, countNumber.value), countNumber.max);
+                countNumber.value = value;
+                countRange.value = value;
+            });
+
+            // Update timer every second
+            setInterval(updateResetTimer, 1000);
+            updateResetTimer();
+
+            // Log welcome message
+            setTimeout(() => {
+                utils.logMessage('🚀 NGL Spam Tool connected to backend API', 'success');
+                utils.logMessage('⚙️ Enter target username and message to start', 'info');
+                utils.logMessage('📊 Limits: 200/day per user, 100/day per target', 'info');
+            }, 500);
+        });
+    </script>
+</body>
+</html>

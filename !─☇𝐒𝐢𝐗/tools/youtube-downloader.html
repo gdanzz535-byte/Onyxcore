@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>YouTube Downloader - Indictive Core</title>
+    
+    <!-- Load Font: Orbitron & Share Tech Mono (sama seperti dashboard) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- VARIABLES SAMA SEPERTI DASHBOARD --- */
+        :root {
+            --bg-dark: #080310;       
+            --bg-gradient: radial-gradient(circle at 50% 0%, #1a0b2e 0%, #080310 80%);
+            
+            --card-bg: rgba(26, 11, 46, 0.85);       
+            --accent-pink: #db2777;   
+            --accent-purple: #9333ea; 
+            
+            /* Enhanced Colors */
+            --accent-red: #ff3333;
+            --accent-red-dark: #cc0000;
+            --accent-red-glow: rgba(255, 51, 51, 0.7);
+            --card-bg-red: rgba(50, 10, 10, 0.9);
+            
+            --accent-blue: #3b82f6;
+            --accent-blue-dark: #1d4ed8;
+            --accent-blue-glow: rgba(59, 130, 246, 0.7);
+            --card-bg-blue: rgba(10, 20, 50, 0.9);
+            
+            --accent-green: #10b981;
+            --accent-green-dark: #059669;
+            --accent-green-glow: rgba(16, 185, 129, 0.7);
+            --card-bg-green: rgba(10, 40, 30, 0.9);
+            
+            --accent-purple-tool: #8b5cf6;
+            --accent-purple-dark: #7c3aed;
+            --accent-purple-glow: rgba(139, 92, 246, 0.7);
+            --card-bg-purple: rgba(30, 15, 50, 0.9);
+            
+            --accent-cyan: #06b6d4;
+            --accent-cyan-dark: #0891b2;
+            --accent-cyan-glow: rgba(6, 182, 212, 0.7);
+            --card-bg-cyan: rgba(10, 30, 40, 0.9);
+            
+            --accent-yellow: #eab308;
+            --accent-yellow-dark: #ca8a04;
+            --accent-yellow-glow: rgba(234, 179, 8, 0.7);
+            --card-bg-yellow: rgba(50, 40, 10, 0.9);
+            
+            --text-gray: #9ca3af; 
+            
+            /* FONT DEFINITIONS (sama seperti dashboard) */
+            --font-title: 'Share Tech Mono', sans-serif;   /* KHUSUS JUDUL (Tebal) */
+            --font-code: 'Share Tech Mono', monospace;  /* KHUSUS TEXT KECIL (Terinal) */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        
+        body {
+            background-color: var(--bg-dark);
+            background-image: var(--bg-gradient);
+            color: #ffffff;
+            font-family: var(--font-code); /* Default pakai font coding */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- BACKGROUND PARTICLES (sama seperti dashboard) --- */
+        #particle-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none; overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6); 
+            border-radius: 50%;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+            animation: floatUp linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+        }
+
+        /* --- HEADER (sama seperti dashboard) --- */
+        header {
+            display: flex; 
+            align-items: center; 
+            gap: 16px; 
+            padding: 20px 25px; 
+            padding-top: 40px; 
+            padding-bottom: 20px; 
+            background: rgba(8, 3, 16, 0.95);
+            z-index: 50;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+        
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 25px; right: 25px; height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(219, 39, 119, 0.3) 20%, rgba(147, 51, 234, 0.3) 80%, transparent 100%);
+        }
+
+        .brand-title { 
+            font-family: var(--font-title); /* JUDUL HEADER PAKE FONT TEBAL */
+            font-size: 20px; 
+            font-weight: 700; 
+            letter-spacing: 1px; 
+            color: #fff;
+            text-shadow: 0 0 10px rgba(219, 39, 119, 0.6);
+            line-height: 1.1; padding-top: 1px; 
+        }
+        
+        .header-icon { 
+            color: #fff; cursor: pointer; flex-shrink: 0; margin-top: 2px;
+            transition: transform 0.2s;
+        }
+        .header-icon:active { transform: scale(0.9); color: var(--accent-pink); }
+
+        /* --- BACK BUTTON --- */
+        .back-btn {
+            background: rgba(219, 39, 119, 0.1);
+            border: 1px solid rgba(219, 39, 119, 0.3);
+            color: var(--accent-pink);
+            border-radius: 12px;
+            padding: 10px 15px;
+            font-family: var(--font-code);
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        
+        .back-btn:active { 
+            background: rgba(219, 39, 119, 0.2); 
+            transform: scale(0.98);
+        }
+
+        /* --- MAIN CONTENT (sama seperti dashboard) --- */
+        main { 
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 0 20px; 
+            padding-bottom: 30px; 
+            scroll-behavior: smooth; 
+            padding-top: 0; 
+            position: relative;
+        }
+
+        /* --- TOOLS HEADER STYLE (sama seperti dashboard) --- */
+        .tools-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 25px;
+            margin-top: 20px;
+        }
+        .tools-title-group { display: flex; align-items: center; gap: 15px; }
+        .tools-logo { 
+            width: 50px; height: 50px; 
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 20px rgba(219, 39, 119, 0.5);
+            animation: pulsePink 2s infinite;
+        }
+        @keyframes pulsePink {
+            0% { box-shadow: 0 0 15px rgba(219, 39, 119, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(219, 39, 119, 0.7); }
+            100% { box-shadow: 0 0 15px rgba(219, 39, 119, 0.5); }
+        }
+        .tools-text h2 { 
+            font-family: var(--font-title); /* JUDUL HALAMAN TOOLS PAKE FONT TEBAL */
+            font-size: 24px; 
+            font-weight: 700; 
+            letter-spacing: 0.5px; 
+            color: #fff; margin-bottom: 2px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        .tools-text p { 
+            font-family: var(--font-code);
+            font-size: 11px; 
+            color: var(--accent-pink); 
+            font-weight: 400; 
+            letter-spacing: 0px; 
+            text-shadow: 0 0 8px rgba(219, 39, 119, 0.6);
+        }
+        
+        .owner-badge {
+            border: 2px solid var(--accent-pink);
+            color: var(--accent-pink);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px; 
+            font-weight: 700; 
+            letter-spacing: 0px;
+            background: rgba(219, 39, 119, 0.15);
+            box-shadow: 0 0 10px rgba(219, 39, 119, 0.3);
+            font-family: var(--font-title);
+        }
+
+        /* --- TABS STYLE (dengan gaya dashboard) --- */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 5px;
+            border-radius: 15px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            color: var(--text-gray);
+            font-family: var(--font-title);
+            font-size: 12px;
+            letter-spacing: 1px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            color: white;
+            box-shadow: 0 5px 15px rgba(219, 39, 119, 0.3);
+        }
+
+        /* --- INPUT CARD (dengan gaya dashboard) --- */
+        .input-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 22px;
+            padding: 25px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: block;
+        }
+
+        .input-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-pink), transparent);
+            opacity: 0.7;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 18px 20px;
+            padding-right: 50px;
+            border-radius: 15px;
+            color: white;
+            font-family: var(--font-code);
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-gray);
+        }
+
+        /* --- BUTTON STYLE (sama seperti dashboard) --- */
+        .btn-process {
+            width: 100%;
+            padding: 16px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            border: none;
+            color: white;
+            font-family: var(--font-title);
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(219, 39, 119, 0.3);
+            margin-top: 10px;
+        }
+
+        .btn-process:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 0, 127, 0.4);
+        }
+
+        .btn-process:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* --- SEARCH RESULTS (dengan gaya dashboard) --- */
+        .search-results {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .search-result-item {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            gap: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .search-result-item:hover {
+            border-color: var(--accent-pink);
+            background: rgba(219, 39, 119, 0.1);
+        }
+
+        .result-thumb {
+            width: 80px;
+            height: 45px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .result-info {
+            flex: 1;
+        }
+
+        .result-title {
+            font-family: var(--font-code);
+            font-weight: 600;
+            font-size: 14px;
+            color: white;
+            margin-bottom: 5px;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .result-channel {
+            font-size: 12px;
+            color: var(--text-gray);
+        }
+
+        /* --- LOADER (sama seperti dashboard) --- */
+        .loader-wrapper {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid var(--accent-pink);
+            border-bottom: 3px solid var(--accent-cyan);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loader-text {
+            font-family: var(--font-title);
+            font-size: 12px;
+            color: var(--accent-cyan);
+            letter-spacing: 1px;
+        }
+
+        /* --- RESULT CARD (dengan gaya dashboard) --- */
+        .result-card {
+            display: none;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 22px;
+            padding: 25px;
+            animation: fadeIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            margin-bottom: 20px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .thumb-wrapper {
+            width: 100%;
+            height: 200px;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: black;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .thumb-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-info {
+            margin-bottom: 25px;
+        }
+
+        .video-info h3 {
+            font-family: var(--font-title);
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .video-meta {
+            font-size: 12px;
+            color: var(--accent-cyan);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Audio Player Custom Style */
+        audio {
+            width: 100%;
+            height: 36px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            opacity: 0.8;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        audio::-webkit-media-controls-panel {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        /* --- ACTION BUTTONS (dengan gaya dashboard) --- */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 15px;
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 15px;
+            font-family: var(--font-title);
+            font-weight: 700;
+            font-size: 13px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(219, 39, 119, 0.3);
+            text-align: center;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(219, 39, 119, 0.4);
+        }
+
+        .btn-reset {
+            background: rgba(255, 51, 51, 0.1);
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            border-radius: 15px;
+            cursor: pointer;
+            font-family: var(--font-title);
+            font-weight: 700;
+            font-size: 13px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-reset:hover {
+            background: rgba(255, 51, 51, 0.2);
+        }
+
+        /* --- ERROR TOAST (dengan gaya dashboard) --- */
+        .error-toast {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid var(--accent-red);
+            color: #ff9999;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 13px;
+            display: none;
+            font-family: var(--font-code);
+        }
+
+        /* --- SECTION TITLE (sama seperti dashboard) --- */
+        .section-title { 
+            font-family: var(--font-title); /* JUDUL SECTION PAKE FONT TEBAL */
+            font-size: 15px; 
+            font-weight: 700; 
+            color: #fff; 
+            margin-bottom: 12px; 
+            letter-spacing: 0.5px;
+            border-left: 3px solid var(--accent-pink);
+            padding-left: 10px;
+            margin-top: 20px;
+        }
+
+        /* --- NOTIFICATION STYLE (sama seperti dashboard) --- */
+        .notification {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(26, 11, 46, 0.95);
+            color: var(--accent-pink);
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-family: var(--font-title);
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            z-index: 9999;
+            border: 1px solid rgba(219, 39, 119, 0.3);
+            box-shadow: 0 4px 15px rgba(219, 39, 119, 0.2);
+            animation: slideIn 0.3s ease-out;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            font-size: 13px;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-50%) translateY(-15px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateX(-50%) translateY(0); opacity: 1; }
+            to { transform: translateX(-50%) translateY(-15px); opacity: 0; }
+        }
+
+        /* --- FORMAT SELECTION (dengan gaya dashboard) --- */
+        .format-selection {
+            display: none;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .format-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .format-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .format-option:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(6, 182, 212, 0.1);
+        }
+
+        .format-option.selected {
+            border-color: var(--accent-pink);
+            background: rgba(219, 39, 119, 0.1);
+        }
+
+        .format-label {
+            flex: 1;
+            font-family: var(--font-code);
+            font-size: 14px;
+            color: white;
+        }
+
+        .format-size {
+            font-family: var(--font-title);
+            font-size: 12px;
+            color: var(--accent-cyan);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Particles -->
+    <div id="particle-container"></div>
+
+    <!-- Header -->
+    <header>
+        <a href="/dashboard" class="back-btn">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M19 12H5M12 19l-7-7 7-7"></path>
+            </svg>
+            BACK
+        </a>
+        <div class="brand-title">YOUTUBE DOWNLOADER</div>
+    </header>
+
+    <main>
+        <!-- Tools Header -->
+        <div class="tools-header">
+            <div class="tools-title-group">
+                <div class="tools-logo">
+                    <i class="fab fa-youtube" style="font-size: 28px; color: white;"></i>
+                </div>
+                <div class="tools-text">
+                    <h2>YOUTUBE DOWNLOADER</h2>
+                    <p>Download YouTube Video & Audio</p>
+                </div>
+            </div>
+            <div class="owner-badge" id="user-badge">USER</div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="direct">Direct URL</button>
+            <button class="tab-btn" data-tab="search">Search</button>
+        </div>
+
+        <!-- Direct URL Tab -->
+        <div id="directTab" class="input-card">
+            <div class="input-group">
+                <input type="text" id="urlInput" class="input-field" placeholder="Paste YouTube URL here...">
+                <i class="fas fa-link input-icon"></i>
+            </div>
+            <button id="processBtn" class="btn-process">
+                <i class="fas fa-bolt"></i> GET VIDEO INFO
+            </button>
+            <div id="errorToast" class="error-toast"></div>
+        </div>
+
+        <!-- Search Tab -->
+        <div id="searchTab" class="input-card" style="display: none;">
+            <div class="input-group">
+                <input type="text" id="searchInput" class="input-field" placeholder="Enter keywords to search videos...">
+                <i class="fas fa-search input-icon"></i>
+            </div>
+            <button id="searchBtn" class="btn-process">
+                <i class="fas fa-search"></i> SEARCH VIDEOS
+            </button>
+            
+            <!-- Search Results -->
+            <div id="searchResults" class="search-results"></div>
+        </div>
+
+        <!-- Loader -->
+        <div id="loader" class="loader-wrapper">
+            <div class="spinner"></div>
+            <div class="loader-text">PROCESSING REQUEST...</div>
+        </div>
+
+        <!-- Format Selection -->
+        <div id="formatSelection" class="format-selection">
+            <div class="section-title">SELECT FORMAT</div>
+            <div class="format-options" id="formatOptions">
+                <!-- Format options will be populated here -->
+            </div>
+        </div>
+
+        <!-- Result Card -->
+        <div id="resultCard" class="result-card">
+            <div class="thumb-wrapper">
+                <img id="thumbImg" src="" alt="Thumbnail" class="thumb-img">
+            </div>
+            
+            <div class="video-info">
+                <h3 id="videoTitle">Video Title Loading...</h3>
+                <div class="video-meta">
+                    <i class="fas fa-clock"></i>
+                    <span id="videoDuration">00:00</span>
+                    <span style="margin: 0 5px; color: #555;">|</span>
+                    <i class="fas fa-eye"></i>
+                    <span id="videoViews">0 views</span>
+                    <span style="margin: 0 5px; color: #555;">|</span>
+                    <i class="fas fa-calendar"></i>
+                    <span id="videoDate">Unknown date</span>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a id="downloadBtn" href="#" class="btn-download" target="_blank">
+                    <i class="fas fa-download"></i> DOWNLOAD
+                </a>
+                <button onclick="resetApp()" class="btn-reset">
+                    <i class="fas fa-trash"></i> RESET
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Create background particles (same as dashboard)
+            const container = document.getElementById('particle-container');
+            const particleCount = 35;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 3 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100}vh`;
+                
+                const duration = Math.random() * 15 + 10;
+                particle.style.animationDuration = `${duration}s`;
+                
+                particle.style.animationDelay = `-${Math.random() * 20}s`;
+
+                container.appendChild(particle);
+            }
+
+            // Check user role
+            async function fetchUserData() {
+                try {
+                    const userRole = 'user'; // Default role
+                    const badgeElement = document.getElementById('user-badge');
+                    if (badgeElement) {
+                        badgeElement.textContent = userRole.toUpperCase();
+                    }
+                    
+                    return { role: userRole };
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    return { role: 'user' };
+                }
+            }
+
+            await fetchUserData();
+
+            // Tab Logic
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const searchTab = document.getElementById('searchTab');
+            const directTab = document.getElementById('directTab');
+            const searchResults = document.getElementById('searchResults');
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Update active tab button
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // Show correct tab content
+                    const tab = btn.dataset.tab;
+                    if (tab === 'search') {
+                        searchTab.style.display = 'block';
+                        directTab.style.display = 'none';
+                        resetApp();
+                    } else {
+                        searchTab.style.display = 'none';
+                        directTab.style.display = 'block';
+                        searchResults.style.display = 'none';
+                        resetApp();
+                    }
+                });
+            });
+
+            // YouTube Downloader Logic
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const urlInput = document.getElementById('urlInput');
+            const processBtn = document.getElementById('processBtn');
+            const loader = document.getElementById('loader');
+            const resultCard = document.getElementById('resultCard');
+            const errorToast = document.getElementById('errorToast');
+            const formatSelection = document.getElementById('formatSelection');
+            
+            // Output Elements
+            const thumbImg = document.getElementById('thumbImg');
+            const videoTitle = document.getElementById('videoTitle');
+            const videoDuration = document.getElementById('videoDuration');
+            const videoViews = document.getElementById('videoViews');
+            const videoDate = document.getElementById('videoDate');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const formatOptions = document.getElementById('formatOptions');
+
+            // Show notification function (same as dashboard)
+            function showNotification(message) {
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.innerHTML = `<span style="color:#ffffff">🚀</span> ${message}`;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.animation = 'slideOut 0.3s ease-out';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            document.body.removeChild(notification);
+                        }
+                    }, 300);
+                }, 2000);
+            }
+
+            // Search functionality
+            searchBtn.addEventListener('click', searchVideos);
+            searchInput.addEventListener('keypress', (e) => {
+                if(e.key === 'Enter') searchVideos();
+            });
+
+            async function searchVideos() {
+                const query = searchInput.value.trim();
+                if(!query) {
+                    showError("Please enter search keywords!");
+                    return;
+                }
+
+                // UI State: Loading
+                searchResults.style.display = 'none';
+                resultCard.style.display = 'none';
+                errorToast.style.display = 'none';
+                loader.style.display = 'block';
+                searchBtn.disabled = true;
+                searchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+                try {
+                    // Simulate search results (in a real app, you would call your backend API)
+                    // For demo purposes, we'll show some mock results
+                    setTimeout(() => {
+                        const mockResults = [
+                            {
+                                title: "Indictive Core - Official Trailer",
+                                channel: "Indictive Core",
+                                thumbnail: "https://files.catbox.moe/fgye5n.jpg",
+                                url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                            },
+                            {
+                                title: "Advanced Security Tools Demo",
+                                channel: "Tech Security",
+                                thumbnail: "https://files.catbox.moe/sw0xod.jpg",
+                                url: "https://www.youtube.com/watch?v=example2"
+                            },
+                            {
+                                title: "Cyber Security Tutorial 2024",
+                                channel: "Cyber Academy",
+                                thumbnail: "https://files.catbox.moe/4nei8z.jpeg",
+                                url: "https://www.youtube.com/watch?v=example3"
+                            }
+                        ];
+                        
+                        displaySearchResults(mockResults);
+                        loader.style.display = 'none';
+                        searchBtn.disabled = false;
+                        searchBtn.innerHTML = '<i class="fas fa-search"></i> SEARCH VIDEOS';
+                    }, 1500);
+
+                } catch (err) {
+                    showError("Error searching videos: " + err.message);
+                    loader.style.display = 'none';
+                    searchBtn.disabled = false;
+                    searchBtn.innerHTML = '<i class="fas fa-search"></i> SEARCH VIDEOS';
+                }
+            }
+
+            function displaySearchResults(results) {
+                searchResults.innerHTML = '';
+                
+                if (results.length === 0) {
+                    searchResults.innerHTML = '<div style="text-align: center; color: var(--text-gray); padding: 20px;">No results found</div>';
+                    searchResults.style.display = 'block';
+                    return;
+                }
+
+                results.forEach(video => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'search-result-item';
+                    resultItem.innerHTML = `
+                        <img src="${video.thumbnail || 'https://via.placeholder.com/80x45'}" alt="Thumbnail" class="result-thumb">
+                        <div class="result-info">
+                            <div class="result-title">${video.title || 'No title'}</div>
+                            <div class="result-channel">${video.channel || 'Unknown'}</div>
+                        </div>
+                    `;
+                    
+                    resultItem.addEventListener('click', () => {
+                        urlInput.value = video.url || '';
+                        // Switch to direct tab
+                        tabBtns[0].click();
+                        // Process the video
+                        processVideoDownload(video.url);
+                    });
+                    
+                    searchResults.appendChild(resultItem);
+                });
+                
+                searchResults.style.display = 'block';
+            }
+
+            // Direct URL download
+            processBtn.addEventListener('click', () => {
+                const url = urlInput.value.trim();
+                if(!url) {
+                    showError("Please enter a YouTube URL!");
+                    return;
+                }
+                processVideoDownload(url);
+            });
+
+            urlInput.addEventListener('keypress', (e) => {
+                if(e.key === 'Enter') {
+                    const url = urlInput.value.trim();
+                    if(!url) {
+                        showError("Please enter a YouTube URL!");
+                        return;
+                    }
+                    processVideoDownload(url);
+                }
+            });
+
+            // Process video download
+            async function processVideoDownload(url) {
+                // UI State: Loading
+                resultCard.style.display = 'none';
+                formatSelection.style.display = 'none';
+                errorToast.style.display = 'none';
+                loader.style.display = 'block';
+                
+                if (document.querySelector('.tab-btn.active').dataset.tab === 'search') {
+                    searchBtn.disabled = true;
+                    searchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                } else {
+                    processBtn.disabled = true;
+                    processBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                }
+
+                try {
+                    // Validate YouTube URL
+                    if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
+                        throw new Error("Please enter a valid YouTube URL");
+                    }
+
+                    // Simulate API call (in real app, call your backend API)
+                    setTimeout(() => {
+                        // Mock video data
+                        const videoData = {
+                            title: "Indictive Core - Advanced Security System",
+                            thumbnail: "https://files.catbox.moe/fgye5n.jpg",
+                            duration: "4:32",
+                            views: "1.2M views",
+                            date: "2024-03-15",
+                            formats: [
+                                { quality: "1080p", size: "124 MB", url: "#", type: "video" },
+                                { quality: "720p", size: "78 MB", url: "#", type: "video" },
+                                { quality: "480p", size: "45 MB", url: "#", type: "video" },
+                                { quality: "MP3 320kbps", size: "8.5 MB", url: "#", type: "audio" },
+                                { quality: "MP3 128kbps", size: "3.2 MB", url: "#", type: "audio" }
+                            ]
+                        };
+                        
+                        showVideoInfo(videoData);
+                        showFormatOptions(videoData.formats);
+                        
+                        loader.style.display = 'none';
+                        
+                        if (document.querySelector('.tab-btn.active').dataset.tab === 'search') {
+                            searchBtn.disabled = false;
+                            searchBtn.innerHTML = '<i class="fas fa-search"></i> SEARCH VIDEOS';
+                        } else {
+                            processBtn.disabled = false;
+                            processBtn.innerHTML = '<i class="fas fa-bolt"></i> GET VIDEO INFO';
+                        }
+                        
+                        showNotification("✅ Video information fetched successfully!");
+                        
+                    }, 2000);
+
+                } catch (err) {
+                    showError("Error: " + err.message);
+                    loader.style.display = 'none';
+                    
+                    if (document.querySelector('.tab-btn.active').dataset.tab === 'search') {
+                        searchBtn.disabled = false;
+                        searchBtn.innerHTML = '<i class="fas fa-search"></i> SEARCH VIDEOS';
+                    } else {
+                        processBtn.disabled = false;
+                        processBtn.innerHTML = '<i class="fas fa-bolt"></i> GET VIDEO INFO';
+                    }
+                }
+            }
+
+            function showVideoInfo(data) {
+                videoTitle.textContent = data.title;
+                thumbImg.src = data.thumbnail;
+                videoDuration.textContent = data.duration;
+                videoViews.textContent = data.views;
+                videoDate.textContent = data.date;
+                resultCard.style.display = 'block';
+            }
+
+            function showFormatOptions(formats) {
+                formatOptions.innerHTML = '';
+                
+                formats.forEach((format, index) => {
+                    const option = document.createElement('div');
+                    option.className = 'format-option';
+                    if (index === 0) option.classList.add('selected');
+                    
+                    option.innerHTML = `
+                        <div class="format-label">
+                            <i class="fas ${format.type === 'audio' ? 'fa-music' : 'fa-video'}"></i>
+                            ${format.quality}
+                        </div>
+                        <div class="format-size">${format.size}</div>
+                    `;
+                    
+                    option.addEventListener('click', () => {
+                        document.querySelectorAll('.format-option').forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+                        option.classList.add('selected');
+                        
+                        // Update download button
+                        downloadBtn.href = format.url;
+                        downloadBtn.innerHTML = `<i class="fas fa-download"></i> DOWNLOAD ${format.type === 'audio' ? 'MP3' : 'MP4'}`;
+                        
+                        showNotification(`Selected format: ${format.quality}`);
+                    });
+                    
+                    formatOptions.appendChild(option);
+                });
+                
+                // Set first format as default
+                if (formats.length > 0) {
+                    downloadBtn.href = formats[0].url;
+                    downloadBtn.innerHTML = `<i class="fas fa-download"></i> DOWNLOAD ${formats[0].type === 'audio' ? 'MP3' : 'MP4'}`;
+                }
+                
+                formatSelection.style.display = 'block';
+            }
+
+            function showError(msg) {
+                errorToast.textContent = msg;
+                errorToast.style.display = 'block';
+                setTimeout(() => errorToast.style.display = 'none', 3000);
+            }
+
+            window.resetApp = function() {
+                searchInput.value = '';
+                urlInput.value = '';
+                searchResults.style.display = 'none';
+                resultCard.style.display = 'none';
+                formatSelection.style.display = 'none';
+                errorToast.style.display = 'none';
+                showNotification("App reset successfully!");
+            };
+        });
+    </script>
+</body>
+</html>
