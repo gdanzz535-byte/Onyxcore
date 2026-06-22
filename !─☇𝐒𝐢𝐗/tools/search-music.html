@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Music Search - Indictive Core</title>
+    
+    <!-- Load Font: Orbitron & Share Tech Mono (sama seperti dashboard) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- VARIABLES SAMA SEPERTI DASHBOARD --- */
+        :root {
+            --bg-dark: #080310;       
+            --bg-gradient: radial-gradient(circle at 50% 0%, #1a0b2e 0%, #080310 80%);
+            
+            --card-bg: rgba(26, 11, 46, 0.85);       
+            --accent-pink: #db2777;   
+            --accent-purple: #9333ea; 
+            
+            /* Enhanced Colors */
+            --accent-red: #ff3333;
+            --accent-green: #10b981;
+            --accent-cyan: #06b6d4;
+            --accent-yellow: #eab308;
+            
+            --text-gray: #9ca3af; 
+            
+            /* FONT DEFINITIONS (sama seperti dashboard) */
+            --font-title: 'Share Tech Mono', sans-serif;
+            --font-code: 'Share Tech Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        
+        body {
+            background-color: var(--bg-dark);
+            background-image: var(--bg-gradient);
+            color: #ffffff;
+            font-family: var(--font-code);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- BACKGROUND PARTICLES (sama seperti dashboard) --- */
+        #particle-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none; overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6); 
+            border-radius: 50%;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+            animation: floatUp linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+        }
+
+        /* --- HEADER (sama seperti dashboard) --- */
+        header {
+            display: flex; 
+            align-items: center; 
+            gap: 16px; 
+            padding: 20px 25px; 
+            padding-top: 40px; 
+            padding-bottom: 20px; 
+            background: rgba(8, 3, 16, 0.95);
+            z-index: 50;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+        
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 25px; right: 25px; height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(219, 39, 119, 0.3) 20%, rgba(147, 51, 234, 0.3) 80%, transparent 100%);
+        }
+
+        .brand-title { 
+            font-family: var(--font-title);
+            font-size: 20px; 
+            font-weight: 700; 
+            letter-spacing: 1px; 
+            color: #fff;
+            text-shadow: 0 0 10px rgba(219, 39, 119, 0.6);
+            line-height: 1.1; padding-top: 1px; 
+        }
+        
+        .header-icon { 
+            color: #fff; cursor: pointer; flex-shrink: 0; margin-top: 2px;
+            transition: transform 0.2s;
+        }
+        .header-icon:active { transform: scale(0.9); color: var(--accent-pink); }
+
+        /* --- BACK BUTTON --- */
+        .back-btn {
+            background: rgba(219, 39, 119, 0.1);
+            border: 1px solid rgba(219, 39, 119, 0.3);
+            color: var(--accent-pink);
+            border-radius: 12px;
+            padding: 10px 15px;
+            font-family: var(--font-code);
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        
+        .back-btn:active { 
+            background: rgba(219, 39, 119, 0.2); 
+            transform: scale(0.98);
+        }
+
+        /* --- MAIN CONTENT (sama seperti dashboard) --- */
+        main { 
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 0 20px; 
+            padding-bottom: 30px; 
+            scroll-behavior: smooth; 
+            padding-top: 0; 
+            position: relative;
+        }
+
+        /* --- TOOLS HEADER STYLE (sama seperti dashboard) --- */
+        .tools-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 25px;
+            margin-top: 20px;
+        }
+        .tools-title-group { display: flex; align-items: center; gap: 15px; }
+        .tools-logo { 
+            width: 50px; height: 50px; 
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 20px rgba(219, 39, 119, 0.5);
+            animation: pulsePink 2s infinite;
+        }
+        @keyframes pulsePink {
+            0% { box-shadow: 0 0 15px rgba(219, 39, 119, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(219, 39, 119, 0.7); }
+            100% { box-shadow: 0 0 15px rgba(219, 39, 119, 0.5); }
+        }
+        .tools-text h2 { 
+            font-family: var(--font-title);
+            font-size: 24px; 
+            font-weight: 700; 
+            letter-spacing: 0.5px; 
+            color: #fff; margin-bottom: 2px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        .tools-text p { 
+            font-family: var(--font-code);
+            font-size: 11px; 
+            color: var(--accent-pink); 
+            font-weight: 400; 
+            letter-spacing: 0px; 
+            text-shadow: 0 0 8px rgba(219, 39, 119, 0.6);
+        }
+        
+        .owner-badge {
+            border: 2px solid var(--accent-pink);
+            color: var(--accent-pink);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px; 
+            font-weight: 700; 
+            letter-spacing: 0px;
+            background: rgba(219, 39, 119, 0.15);
+            box-shadow: 0 0 10px rgba(219, 39, 119, 0.3);
+            font-family: var(--font-title);
+        }
+
+        /* --- SEARCH CARD (dengan gaya dashboard) --- */
+        .search-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 22px;
+            padding: 25px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-pink), transparent);
+            opacity: 0.7;
+        }
+
+        /* --- SEARCH INPUT GROUP (dengan gaya dashboard) --- */
+        .input-group {
+            display: flex;
+            gap: 12px;
+            position: relative;
+        }
+
+        .input-field {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 20px;
+            border-radius: 15px;
+            color: white;
+            font-family: var(--font-code);
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+        }
+
+        .search-btn {
+            width: 50px;
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            border: none;
+            border-radius: 15px;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 5px 15px rgba(219, 39, 119, 0.3);
+        }
+
+        .search-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* --- LOADER (sama seperti dashboard) --- */
+        .loader-wrapper {
+            display: none;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid var(--accent-pink);
+            border-bottom: 3px solid var(--accent-cyan);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loader-text {
+            font-family: var(--font-title);
+            font-size: 12px;
+            color: var(--accent-cyan);
+            letter-spacing: 1px;
+        }
+
+        /* --- SONG LIST (dengan gaya dashboard) --- */
+        .song-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .song-item {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+            transition: 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .song-item:hover {
+            border-color: var(--accent-pink);
+            background: rgba(219, 39, 119, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .song-item.active {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+        }
+
+        .song-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .song-info {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .song-title {
+            font-family: var(--font-title);
+            font-size: 14px;
+            color: white;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .song-artist {
+            font-size: 12px;
+            color: var(--text-gray);
+        }
+
+        .play-indicator {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-pink);
+            font-size: 12px;
+        }
+
+        /* --- MUSIC PLAYER CARD (dengan gaya dashboard) --- */
+        .music-card {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%) translateY(100%);
+            width: 100%;
+            max-width: 600px;
+            background: rgba(8, 3, 16, 0.98);
+            border-top: 2px solid var(--accent-pink);
+            border-radius: 25px 25px 0 0;
+            padding: 30px 25px 40px 25px;
+            z-index: 1500;
+            box-shadow: 0 -10px 60px rgba(219, 39, 119, 0.4);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .music-card.active {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .card-handle {
+            width: 60px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .btn-close {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background: none;
+            border: none;
+            color: var(--text-gray);
+            font-size: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .btn-close:hover {
+            color: var(--accent-pink);
+        }
+
+        .card-content {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card-art-box {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin-bottom: 25px;
+        }
+
+        .card-art {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-cyan);
+            box-shadow: 0 0 35px rgba(6, 182, 212, 0.3);
+            animation: spin 8s linear infinite;
+            animation-play-state: paused;
+        }
+
+        .card-art.playing {
+            animation-play-state: running;
+        }
+
+        .card-art-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 35px;
+            height: 35px;
+            background: var(--bg-dark);
+            border-radius: 50%;
+            border: 2px solid var(--accent-cyan);
+            z-index: 2;
+        }
+
+        .card-info {
+            text-align: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+
+        .card-title {
+            font-family: var(--font-title);
+            font-size: 18px;
+            color: white;
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(219, 39, 119, 0.5);
+        }
+
+        .card-artist {
+            font-size: 14px;
+            color: var(--text-gray);
+            font-family: var(--font-code);
+        }
+
+        .card-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            width: 100%;
+        }
+
+        .ctrl-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .ctrl-btn:active {
+            transform: scale(0.9);
+        }
+
+        .btn-play {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            font-size: 22px;
+            box-shadow: 0 0 25px rgba(219, 39, 119, 0.5);
+        }
+
+        .btn-sub {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 18px;
+            color: var(--accent-cyan);
+        }
+        
+        .btn-sub:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent-cyan);
+        }
+
+        /* --- NOTIFICATION STYLE (sama seperti dashboard) --- */
+        .notification {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(26, 11, 46, 0.95);
+            color: var(--accent-pink);
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-family: var(--font-title);
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            z-index: 9999;
+            border: 1px solid rgba(219, 39, 119, 0.3);
+            box-shadow: 0 4px 15px rgba(219, 39, 119, 0.2);
+            animation: slideIn 0.3s ease-out;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            font-size: 13px;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-50%) translateY(-15px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateX(-50%) translateY(0); opacity: 1; }
+            to { transform: translateX(-50%) translateY(-15px); opacity: 0; }
+        }
+
+        /* --- NO RESULTS MESSAGE --- */
+        .no-results {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-gray);
+            font-family: var(--font-code);
+            font-size: 14px;
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 768px) {
+            .card-controls {
+                gap: 20px;
+            }
+            
+            .btn-play {
+                width: 55px;
+                height: 55px;
+                font-size: 20px;
+            }
+            
+            .btn-sub {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+            
+            .card-art-box {
+                width: 120px;
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Particles -->
+    <div id="particle-container"></div>
+
+    <!-- Header -->
+    <header>
+        <a href="/dashboard" class="back-btn">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M19 12H5M12 19l-7-7 7-7"></path>
+            </svg>
+            BACK
+        </a>
+        <div class="brand-title">MUSIC SEARCH</div>
+    </header>
+
+    <main>
+        <!-- Tools Header -->
+        <div class="tools-header">
+            <div class="tools-title-group">
+                <div class="tools-logo">
+                    <i class="fas fa-music" style="font-size: 28px; color: white;"></i>
+                </div>
+                <div class="tools-text">
+                    <h2>MUSIC SEARCH</h2>
+                    <p>Search and Play Music Online</p>
+                </div>
+            </div>
+            <div class="owner-badge" id="user-badge">USER</div>
+        </div>
+
+        <!-- Search Card -->
+        <div class="search-card">
+            <div class="input-group">
+                <input type="text" id="searchInput" class="input-field" placeholder="Search for songs, artists, or albums...">
+                <button id="searchBtn" class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Loader -->
+        <div id="loader" class="loader-wrapper">
+            <div class="spinner"></div>
+            <div class="loader-text">SEARCHING DATABASE...</div>
+        </div>
+
+        <!-- Results -->
+        <div id="songList" class="song-list">
+            <!-- Song items will be injected here -->
+        </div>
+    </main>
+
+    <!-- Music Player Card -->
+    <div class="music-card" id="musicCard">
+        <div class="card-handle"></div>
+        <button class="btn-close" onclick="closePlayer()">
+            <i class="fas fa-chevron-down"></i>
+        </button>
+        
+        <div class="card-content">
+            <div class="card-art-box">
+                <img src="https://via.placeholder.com/150" class="card-art" id="cardArt">
+                <div class="card-art-center"></div>
+            </div>
+            
+            <div class="card-info">
+                <div class="card-title" id="cardTitle">Song Title</div>
+                <div class="card-artist" id="cardArtist">Artist Name</div>
+            </div>
+
+            <div class="card-controls">
+                <button class="ctrl-btn btn-sub" onclick="stopMusic()">
+                    <i class="fas fa-stop"></i>
+                </button>
+                
+                <button class="ctrl-btn btn-play" onclick="togglePlay()">
+                    <i class="fas fa-play" id="playIcon"></i>
+                </button>
+                
+                <a href="#" class="ctrl-btn btn-sub" id="cardDl" download target="_blank">
+                    <i class="fas fa-download"></i>
+                </a>
+            </div>
+        </div>
+        
+        <audio id="audioPlayer"></audio>
+    </div>
+
+    <script>
+        // Partikel background
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('particle-container');
+            const particleCount = 25;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 2 + 1;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100}vh`;
+                
+                const duration = Math.random() * 15 + 10;
+                particle.style.animationDuration = `${duration}s`;
+                
+                particle.style.animationDelay = `-${Math.random() * 20}s`;
+
+                container.appendChild(particle);
+            }
+
+            // Set user badge
+            document.getElementById('user-badge').textContent = 'USER';
+        });
+
+        // ===== VARIABEL DAN FUNGSI UTAMA =====
+        
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const songList = document.getElementById('songList');
+        const loader = document.getElementById('loader');
+        
+        // Player Elements
+        const musicCard = document.getElementById('musicCard');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const cardArt = document.getElementById('cardArt');
+        const cardTitle = document.getElementById('cardTitle');
+        const cardArtist = document.getElementById('cardArtist');
+        const playIcon = document.getElementById('playIcon');
+        const cardDl = document.getElementById('cardDl');
+
+        // Show notification function
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `<span style="color:#ffffff">🎵</span> ${message}`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 2000);
+        }
+
+        // Search music function
+        async function searchMusic() {
+            const query = searchInput.value.trim();
+            if (!query) {
+                showNotification("Please enter a search query!");
+                return;
+            }
+
+            songList.innerHTML = '';
+            loader.style.display = 'block';
+            searchInput.blur();
+
+            try {
+                // Fetch from iTunes API
+                const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&limit=20`);
+                const data = await res.json();
+                
+                loader.style.display = 'none';
+
+                if (data.resultCount === 0) {
+                    songList.innerHTML = '<div class="no-results">No results found. Try a different search.</div>';
+                    return;
+                }
+
+                // Display results
+                data.results.forEach((song, index) => {
+                    // Get high resolution artwork
+                    const artwork = song.artworkUrl100.replace('100x100', '300x300');
+                    
+                    const songItem = document.createElement('div');
+                    songItem.className = 'song-item';
+                    songItem.style.animationDelay = `${index * 0.05}s`;
+                    songItem.innerHTML = `
+                        <img src="${artwork}" class="song-img" alt="Album Art">
+                        <div class="song-info">
+                            <div class="song-title">${song.trackName || 'Unknown Title'}</div>
+                            <div class="song-artist">${song.artistName || 'Unknown Artist'}</div>
+                        </div>
+                        <div class="play-indicator">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    `;
+
+                    songItem.addEventListener('click', () => {
+                        playSong(song.previewUrl, song.trackName, song.artistName, artwork);
+                    });
+
+                    songList.appendChild(songItem);
+                });
+
+                showNotification(`Found ${data.resultCount} results`);
+
+            } catch (error) {
+                loader.style.display = 'none';
+                songList.innerHTML = '<div class="no-results">Failed to fetch results. Check your connection.</div>';
+                console.error('Search error:', error);
+                showNotification("Failed to search music");
+            }
+        }
+
+        // Event listeners for search
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') searchMusic();
+        });
+        
+        searchBtn.addEventListener('click', searchMusic);
+
+        // Player functions
+        function playSong(url, title, artist, img) {
+            if (!url) {
+                showNotification("No preview available for this song");
+                return;
+            }
+
+            // Set card info
+            cardTitle.textContent = title || 'Unknown Title';
+            cardArtist.textContent = artist || 'Unknown Artist';
+            cardArt.src = img || 'https://via.placeholder.com/300';
+            cardDl.href = url;
+
+            // Show player
+            musicCard.classList.add('active');
+
+            // Play audio
+            audioPlayer.src = url;
+            audioPlayer.play();
+            
+            updatePlayState(true);
+            showNotification(`Now playing: ${title}`);
+        }
+
+        function togglePlay() {
+            if (audioPlayer.paused) {
+                if (audioPlayer.src) {
+                    audioPlayer.play();
+                    updatePlayState(true);
+                }
+            } else {
+                audioPlayer.pause();
+                updatePlayState(false);
+            }
+        }
+
+        function stopMusic() {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+            updatePlayState(false);
+            showNotification("Music stopped");
+        }
+
+        function closePlayer() {
+            musicCard.classList.remove('active');
+            stopMusic();
+        }
+
+        function updatePlayState(isPlaying) {
+            if (isPlaying) {
+                playIcon.className = "fas fa-pause";
+                cardArt.classList.add('playing');
+            } else {
+                playIcon.className = "fas fa-play";
+                cardArt.classList.remove('playing');
+            }
+        }
+
+        // Audio player events
+        audioPlayer.onended = () => {
+            updatePlayState(false);
+            showNotification("Song finished");
+        };
+
+        // Initial welcome message
+        setTimeout(() => {
+            showNotification("Music Search ready. Search for your favorite songs!");
+        }, 1000);
+    </script>
+</body>
+</html>
