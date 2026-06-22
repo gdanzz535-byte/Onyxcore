@@ -437,18 +437,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
-  const filePath = path.join(__dirname, "AppsVerse", "Login.html");
+  const filePath = path.join(__dirname, "AppsVerse", "login.html");
   fs.readFile(filePath, "utf8", (err, html) => {
-    if (err) return res.status(500).send("✗ Gagal baca Login.html");
+    if (err) return res.status(500).send("✗ Gagal baca login.html");
     res.send(html);
   });
 });
 
 app.get("/login", (req, res) => {
   const msg = req.query.msg || "";
-  const filePath = path.join(__dirname, "AppsVerse", "Login.html");
+  const filePath = path.join(__dirname, "AppsVerse", "login.html");
   fs.readFile(filePath, "utf8", (err, html) => {
-    if (err) return res.status(500).send("✗ Gagal baca file Login.html");
+    if (err) return res.status(500).send("✗ Gagal baca file login.html");
     res.send(html);
   });
 });
